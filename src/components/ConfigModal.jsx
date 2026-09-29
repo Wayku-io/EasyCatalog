@@ -2,16 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {
   Key,
   GitBranch,
-  FolderGit2,
   X,
   Check,
   ExternalLink,
   Coffee,
-  Loader2,
-  Sparkles,
   LogOut,
-  ChevronDown,
-  ChevronUp,
   CheckCircle2,
   Scale
 } from 'lucide-react';
@@ -21,8 +16,7 @@ import {
   fetchUserProfile,
   fetchUserRepos,
   createDefaultRepo,
-  loginWithGitHub,
-  getGitHubClientId
+  loginWithGitHub
 } from '../services/github';
 
 export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onClose, onSkip, onOpenLegal }) {
@@ -36,9 +30,6 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
 
   // Auto-detection state
   const [userProfile, setUserProfile] = useState(null);
-  const [isLoadingUser, setIsLoadingUser] = useState(false);
-  const [isAutoCreatingRepo, setIsAutoCreatingRepo] = useState(false);
-  const [showAdvancedRepo, setShowAdvancedRepo] = useState(false);
 
   useEffect(() => {
     if (config) {
@@ -63,7 +54,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
     }
   }, [isOpen]);
 
-  // Auto-detect user & auto-configure repository
+  // Load user profile when token is present
   useEffect(() => {
     const token = githubToken.trim();
     if (!token) {
@@ -72,48 +63,38 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
     }
 
     let isMounted = true;
-    const timer = setTimeout(async () => {
-      setIsLoadingUser(true);
-      setError('');
+    (async () => {
       try {
         const profile = await fetchUserProfile(token);
         if (!isMounted) return;
         setUserProfile(profile);
 
-        // If repo is not set yet, automatically set it to username/EasyCatalog
         const defaultRepo = `${profile.login}/EasyCatalog`;
-        if (!githubRepo || githubRepo.endsWith('/EasyCatalog')) {
+        if (!githubRepo) {
           setGithubRepo(defaultRepo);
         }
 
-        // Check if repo exists; if not, auto-create it silently
+        // Verify or auto-create repo silently
         const repos = await fetchUserRepos(token);
         if (!isMounted) return;
 
         const exists = repos.some((r) => r.toLowerCase() === defaultRepo.toLowerCase());
-        if (!exists && (!githubRepo || githubRepo === defaultRepo)) {
-          setIsAutoCreatingRepo(true);
+        if (!exists) {
           try {
             await createDefaultRepo(token, 'EasyCatalog');
-            addToast(`Dépôt "${defaultRepo}" créé automatiquement sur GitHub !`, 'success');
           } catch (createErr) {
             console.warn("Auto-create repo notice:", createErr);
-          } finally {
-            if (isMounted) setIsAutoCreatingRepo(false);
           }
         }
       } catch (err) {
         if (isMounted) {
           setUserProfile(null);
         }
-      } finally {
-        if (isMounted) setIsLoadingUser(false);
       }
-    }, 450);
+    })();
 
     return () => {
       isMounted = false;
-      clearTimeout(timer);
     };
   }, [githubToken]);
 
@@ -121,7 +102,6 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
     setGithubToken('');
     setGithubRepo('');
     setUserProfile(null);
-    setShowAdvancedRepo(false);
     addToast("Compte GitHub déconnecté.", "info");
   };
 
@@ -133,14 +113,8 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
     const cleanToken = githubToken.trim();
     let cleanRepo = githubRepo.trim();
 
-    // If user has a token & profile but repo is empty, auto-fill it
     if (cleanToken && userProfile && !cleanRepo) {
       cleanRepo = `${userProfile.login}/EasyCatalog`;
-    }
-
-    if (cleanRepo && !cleanRepo.includes('/')) {
-      setError("Le dépôt GitHub doit être sous la forme 'pseudo/nom-du-depot'.");
-      return;
     }
 
     setError('');
@@ -162,7 +136,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
         }
       }}
     >
-      <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '520px' }}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
         <div className="modal-header">
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
@@ -179,7 +153,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                   padding: '0.15rem 0.5rem',
                   borderRadius: '9999px'
                 }}>
-                  Mode Découverte
+                  Configuration
                 </span>
               )}
             </div>
@@ -208,7 +182,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
         )}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {/* Language Selector */}
+          {/* 1. Language Selector */}
           <div className="form-group">
             <label className="form-label">{t('languageLabel')}</label>
             <select
@@ -224,7 +198,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
             </select>
           </div>
 
-          {/* TMDB API Key */}
+          {/* 2. TMDB API Key */}
           <div className="form-group">
             <div className="form-label">
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -252,7 +226,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
             <span className="form-help">{t('tmdbKeyHelp')}</span>
           </div>
 
-          {/* GITHUB INTEGRATION - 1 STEP ONLY */}
+          {/* 3. GITHUB 1-CLICK CONNECTION ONLY */}
           <div style={{
             background: 'rgba(255, 255, 255, 0.03)',
             border: '1px solid rgba(255, 255, 255, 0.08)',
@@ -265,7 +239,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontWeight: 600, fontSize: '0.92rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                 <GitBranch size={16} color="var(--emerald)" />
-                Connexion GitHub (Hébergement)
+                Hébergement GitHub
               </span>
               {userProfile && (
                 <button
@@ -290,82 +264,44 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
               )}
             </div>
 
-            {/* If user is connected */}
+            {/* If user is connected: User card */}
             {userProfile ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <div style={{
-                  background: 'rgba(16, 185, 129, 0.08)',
-                  border: '1px solid rgba(16, 185, 129, 0.25)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '0.85rem 1rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.85rem'
-                }}>
-                  <img
-                    src={userProfile.avatar_url}
-                    alt={userProfile.login}
-                    style={{ width: '42px', height: '42px', borderRadius: '50%', border: '2px solid var(--emerald)' }}
-                  />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem' }}>
-                        {userProfile.name || userProfile.login}
-                      </span>
-                      <span style={{ color: 'var(--emerald)', fontSize: '0.82rem', fontWeight: 500 }}>
-                        @{userProfile.login}
-                      </span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--emerald)', fontSize: '0.78rem', marginTop: '0.2rem' }}>
-                      <CheckCircle2 size={14} />
-                      <span>Compte connecté & Dépôt <strong>{githubRepo || `${userProfile.login}/EasyCatalog`}</strong> prêt</span>
-                    </div>
+              <div style={{
+                background: 'rgba(16, 185, 129, 0.08)',
+                border: '1px solid rgba(16, 185, 129, 0.25)',
+                borderRadius: 'var(--radius-md)',
+                padding: '0.85rem 1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.85rem'
+              }}>
+                <img
+                  src={userProfile.avatar_url}
+                  alt={userProfile.login}
+                  style={{ width: '42px', height: '42px', borderRadius: '50%', border: '2px solid var(--emerald)' }}
+                />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem' }}>
+                      {userProfile.name || userProfile.login}
+                    </span>
+                    <span style={{ color: 'var(--emerald)', fontSize: '0.82rem', fontWeight: 500 }}>
+                      @{userProfile.login}
+                    </span>
                   </div>
-                </div>
-
-                {/* Advanced: customize repo if power user really wants */}
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => setShowAdvancedRepo(!showAdvancedRepo)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--text-muted)',
-                      fontSize: '0.75rem',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.3rem',
-                      padding: 0
-                    }}
-                  >
-                    <span>Personnaliser le nom du dépôt (avancé)</span>
-                    {showAdvancedRepo ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                  </button>
-
-                  {showAdvancedRepo && (
-                    <div style={{ marginTop: '0.5rem' }}>
-                      <input
-                        type="text"
-                        className="glass-input"
-                        value={githubRepo}
-                        onChange={(e) => setGithubRepo(e.target.value)}
-                        placeholder={`${userProfile.login}/EasyCatalog`}
-                        style={{ fontSize: '0.85rem' }}
-                      />
-                    </div>
-                  )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--emerald)', fontSize: '0.78rem', marginTop: '0.2rem' }}>
+                    <CheckCircle2 size={14} />
+                    <span>Dépôt <strong>{githubRepo || `${userProfile.login}/EasyCatalog`}</strong> prêt</span>
+                  </div>
                 </div>
               </div>
             ) : (
-              /* If NOT connected */
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+              /* If NOT connected: The single 1-Click GitHub button */
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', lineHeight: 1.45, margin: 0 }}>
-                  Connectez votre compte pour héberger et synchroniser vos catalogues automatiquement sur GitHub.
+                  Connectez votre compte GitHub en 1 clic pour héberger et synchroniser automatiquement vos catalogues de streaming.
                 </p>
 
-                {/* 1. Official GitHub OAuth Button (1 Clic) */}
                 <button
                   type="button"
                   onClick={() => {
@@ -379,7 +315,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                     background: '#24292e',
                     border: '1px solid rgba(255, 255, 255, 0.2)',
                     color: '#ffffff',
-                    padding: '0.8rem 1rem',
+                    padding: '0.85rem 1rem',
                     borderRadius: 'var(--radius-md)',
                     fontSize: '0.92rem',
                     fontWeight: 700,
@@ -400,62 +336,8 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                   </svg>
                   <span>Se connecter avec GitHub (1 Clic)</span>
                 </button>
-
-                {/* Divider */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', margin: '0.1rem 0' }}>
-                  <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.08)' }} />
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>
-                    OU AVEC UN TOKEN PERSONNEL
-                  </span>
-                  <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.08)' }} />
-                </div>
-
-                {/* Direct 1-click token generator button */}
-                <a
-                  href="https://github.com/settings/tokens/new?scopes=repo&description=EasyCatalog"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-secondary"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    textDecoration: 'none',
-                    fontSize: '0.82rem',
-                    padding: '0.55rem',
-                    borderColor: 'rgba(16, 185, 129, 0.3)',
-                    background: 'rgba(16, 185, 129, 0.06)',
-                    color: 'var(--emerald)'
-                  }}
-                >
-                  <Sparkles size={14} />
-                  <span>Générer un Token pré-rempli sur GitHub</span>
-                  <ExternalLink size={12} />
-                </a>
-
-                {/* Single Token Input */}
-                <div className="form-group" style={{ marginBottom: 0 }}>
-                  <div style={{ position: 'relative' }}>
-                    <input
-                      type="password"
-                      className="glass-input"
-                      value={githubToken}
-                      onChange={(e) => setGithubToken(e.target.value)}
-                      placeholder="Collez votre token ici (ghp_...)"
-                      autoComplete="off"
-                      style={{ paddingRight: isLoadingUser ? '2.5rem' : '0.9rem', fontSize: '0.85rem' }}
-                    />
-                    {isLoadingUser && (
-                      <div style={{ position: 'absolute', right: '0.8rem', top: '50%', transform: 'translateY(-50%)' }}>
-                        <Loader2 size={16} className="spin" color="var(--emerald)" />
-                      </div>
-                    )}
-                  </div>
-                </div>
               </div>
             )}
-
           </div>
 
           {/* Coffee support link inside settings for mobile users */}
@@ -464,14 +346,14 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-coffee"
-            style={{ width: '100%', minHeight: '42px', fontSize: '0.85rem' }}
+            style={{ width: '100%', minHeight: '40px', fontSize: '0.85rem' }}
           >
             <Coffee size={16} />
             <span>Soutenir le projet (Offrir un café)</span>
           </a>
 
           {/* Action buttons */}
-          <div style={{ display: 'flex', gap: '0.65rem', marginTop: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.65rem', marginTop: '0.3rem' }}>
             {isInitialGate ? (
               <button
                 type="button"
@@ -503,7 +385,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
           </div>
 
           {/* Legal, Privacy & Disclaimer trigger */}
-          <div style={{ textAlign: 'center', marginTop: '0.2rem' }}>
+          <div style={{ textAlign: 'center', marginTop: '0.1rem' }}>
             <button
               type="button"
               onClick={() => {
@@ -523,7 +405,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
               }}
             >
               <Scale size={12} />
-              <span>Mentions Légales, Confidentialité (RGPD) & Décharge TMDB</span>
+              <span>Mentions Légales, Confidentialité & Décharge TMDB</span>
             </button>
           </div>
         </form>
