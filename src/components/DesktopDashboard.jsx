@@ -46,7 +46,8 @@ export default function DesktopDashboard({
   handleResetBuilder,
   _editingCollectionPath,
   setEditingCollectionPath,
-  onOpenSettings
+  onOpenSettings,
+  onOpenLegal
 }) {
   const { t, language } = useLanguage();
   const { addToast } = useToast();
@@ -453,6 +454,26 @@ export default function DesktopDashboard({
             <span>Exporter mes catalogues en JSON</span>
           </button>
         )}
+
+        {/* Footer info & Legal */}
+        <div style={{ textAlign: 'center', marginTop: '0.4rem', borderTop: '1px solid rgba(255, 255, 255, 0.06)', paddingTop: '0.4rem' }}>
+          <button
+            type="button"
+            onClick={() => onOpenLegal && onOpenLegal()}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-muted)',
+              fontSize: '0.72rem',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem'
+            }}
+          >
+            <span>Mentions Légales & Confidentialité</span>
+          </button>
+        </div>
       </div>
 
       {/* ========================================================

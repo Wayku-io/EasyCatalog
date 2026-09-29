@@ -9,6 +9,7 @@ import BuilderScreen from './components/BuilderScreen';
 import CollectionsScreen from './components/CollectionsScreen';
 import DesktopDashboard from './components/DesktopDashboard';
 import MobileModal from './components/MobileModal';
+import LegalModal from './components/LegalModal';
 import {
   publishCollection,
   parseRepoString,
@@ -95,6 +96,7 @@ export default function App() {
   // Modal States
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
+  const [isLegalOpen, setIsLegalOpen] = useState(false);
 
   // Collection / Builder State
   const [catalogName, setCatalogName] = useState('');
@@ -229,6 +231,7 @@ export default function App() {
             onSave={handleSaveConfig}
             onClose={handleSkipGate}
             onSkip={handleSkipGate}
+            onOpenLegal={() => setIsLegalOpen(true)}
           />
         ) : isDesktop ? (
           /* ========================================================
@@ -249,6 +252,7 @@ export default function App() {
             editingCollectionPath={editingCollectionPath}
             setEditingCollectionPath={setEditingCollectionPath}
             onOpenSettings={() => setIsSettingsOpen(true)}
+            onOpenLegal={() => setIsLegalOpen(true)}
           />
         ) : (
           /* ========================================================
@@ -262,6 +266,7 @@ export default function App() {
                 onOpenCollections={() => setCurrentScreen('collections')}
                 currentRepo={config.githubRepo}
                 onOpenSettings={() => setIsSettingsOpen(true)}
+                onOpenLegal={() => setIsLegalOpen(true)}
               />
             )}
 
@@ -322,6 +327,7 @@ export default function App() {
         config={config}
         onSave={handleSaveConfig}
         onClose={() => setIsSettingsOpen(false)}
+        onOpenLegal={() => setIsLegalOpen(true)}
       />
 
       {/* Mobile QR Modal (desktop only) */}
@@ -330,6 +336,12 @@ export default function App() {
         onClose={() => setIsMobileModalOpen(false)}
         localIp="192.168.1.16"
         port="5173"
+      />
+
+      {/* Legal & Privacy Modal */}
+      <LegalModal
+        isOpen={isLegalOpen}
+        onClose={() => setIsLegalOpen(false)}
       />
     </div>
   );

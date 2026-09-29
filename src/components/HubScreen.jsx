@@ -2,7 +2,7 @@ import React from 'react';
 import { Film, FolderOpen, PlusCircle, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
-export default function HubScreen({ onCreateNew, onOpenCollections, currentRepo, onOpenSettings }) {
+export default function HubScreen({ onCreateNew, onOpenCollections, currentRepo, onOpenSettings, onOpenLegal }) {
   const { t } = useLanguage();
 
   return (
@@ -77,6 +77,25 @@ export default function HubScreen({ onCreateNew, onOpenCollections, currentRepo,
           {t('settings')} ⚙️
         </button>
       </div>
+
+      {/* Mobile Legal Footer */}
+      <div style={{ textAlign: 'center', marginTop: '1.25rem', paddingBottom: '1rem' }}>
+        <button
+          type="button"
+          onClick={() => onOpenLegal && onOpenLegal()}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: 'var(--text-muted)',
+            fontSize: '0.73rem',
+            cursor: 'pointer',
+            textDecoration: 'underline'
+          }}
+        >
+          Mentions Légales, Confidentialité & Décharge TMDB
+        </button>
+      </div>
     </div>
   );
 }
+

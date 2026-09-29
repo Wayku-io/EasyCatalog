@@ -167,7 +167,14 @@ Si vous appréciez EasyCatalog et souhaitez soutenir son développement continu 
 
 ---
 
+## ⚖️ Mentions Légales & Confidentialité
+
+- Consultez notre document complet [LEGAL.md](LEGAL.md) détaillant l'hébergement Vercel, la conformité RGPD (zéro traceur, 100 % local), les attributions obligatoires TMDB et la clause de non-responsabilité (aucun fichier vidéo ni flux hébergé).
+
+---
+
 ## 📄 Licence
 
 Ce projet est sous licence MIT — vous êtes libre de l'utiliser, le modifier et le distribuer.
 Consultez le fichier `LICENSE` pour plus de détails.
+

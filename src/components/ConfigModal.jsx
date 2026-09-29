@@ -12,7 +12,8 @@ import {
   LogOut,
   ChevronDown,
   ChevronUp,
-  CheckCircle2
+  CheckCircle2,
+  Scale
 } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useToast } from './Toast';
@@ -24,7 +25,7 @@ import {
   getGitHubClientId
 } from '../services/github';
 
-export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onClose, onSkip }) {
+export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onClose, onSkip, onOpenLegal }) {
   const { t, language, setLanguage } = useLanguage();
   const { addToast } = useToast();
 
@@ -498,6 +499,31 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
             >
               <Check size={18} />
               <span>{isInitialGate ? t('saveAndContinue') : t('saveSettings')}</span>
+            </button>
+          </div>
+
+          {/* Legal, Privacy & Disclaimer trigger */}
+          <div style={{ textAlign: 'center', marginTop: '0.2rem' }}>
+            <button
+              type="button"
+              onClick={() => {
+                if (onOpenLegal) onOpenLegal();
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--text-muted)',
+                fontSize: '0.73rem',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.2rem'
+              }}
+            >
+              <Scale size={12} />
+              <span>Mentions Légales, Confidentialité (RGPD) & Décharge TMDB</span>
             </button>
           </div>
         </form>
