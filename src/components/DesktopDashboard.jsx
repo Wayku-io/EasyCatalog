@@ -29,6 +29,7 @@ import {
   loadCollectionData,
   deleteCollectionFromGithub,
   compileSuperManifest,
+  fetchSuperManifestInfo,
   parseRepoString
 } from '../services/github';
 import { exportCatalogToJson, exportAllCollectionsToJson } from '../services/export';
@@ -86,8 +87,14 @@ export default function DesktopDashboard({
     setLoadingCollections(true);
     try {
       const { owner, repo } = parseRepoString(config.githubRepo);
-      const list = await fetchExistingCollections(owner, repo, config.githubToken);
+      const [list, superInfo] = await Promise.all([
+        fetchExistingCollections(owner, repo, config.githubToken),
+        fetchSuperManifestInfo(owner, repo, config.githubToken)
+      ]);
       setCollections(list);
+      if (superInfo) {
+        setPackResult(superInfo);
+      }
     } catch (err) {
       console.warn("Erreur chargement collections:", err);
     } finally {
@@ -392,21 +399,45 @@ export default function DesktopDashboard({
               )}
             </button>
           ) : (
-            <div style={{ display: 'flex', gap: '0.35rem' }}>
-              <input
-                type="text"
-                readOnly
-                value={packResult.jsDelivrUrl}
-                className="glass-input"
-                style={{ fontSize: '0.75rem', minHeight: '32px', padding: '0.3rem 0.5rem', color: 'var(--accent-light)' }}
-              />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+              <div style={{ display: 'flex', gap: '0.35rem' }}>
+                <input
+                  type="text"
+                  readOnly
+                  value={packResult.jsDelivrUrl}
+                  className="glass-input"
+                  style={{ fontSize: '0.75rem', minHeight: '32px', padding: '0.3rem 0.5rem', color: 'var(--accent-light)' }}
+                />
+                <button
+                  onClick={handleCopyPack}
+                  className="btn btn-primary"
+                  style={{ minHeight: '32px', width: '34px', padding: 0, flexShrink: 0 }}
+                  title={t('allInOnePackBtn')}
+                >
+                  {copiedPack ? <Check size={14} /> : <Copy size={14} />}
+                </button>
+              </div>
+
+              {/* Bouton Mettre à jour le super manifeste */}
               <button
-                onClick={handleCopyPack}
-                className="btn btn-primary"
-                style={{ minHeight: '32px', width: '34px', padding: 0, flexShrink: 0 }}
-                title={t('allInOnePackBtn')}
+                onClick={handleCompilePack}
+                disabled={isCompilingPack || collections.length === 0}
+                className="btn btn-secondary"
+                style={{
+                  minHeight: '30px',
+                  fontSize: '0.75rem',
+                  padding: '0.25rem 0.6rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.35rem',
+                  color: 'var(--emerald)',
+                  borderColor: 'rgba(16, 185, 129, 0.3)'
+                }}
+                title={t('updatePackBtn')}
               >
-                {copiedPack ? <Check size={14} /> : <Copy size={14} />}
+                <RefreshCw size={12} className={isCompilingPack ? 'spinner' : ''} />
+                <span>{isCompilingPack ? t('updatingPack') : t('updatePackBtn')}</span>
               </button>
             </div>
           )}

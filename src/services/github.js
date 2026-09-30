@@ -518,3 +518,30 @@ export async function compileSuperManifest(owner, repo, token) {
     catalogCount: allCatalogs.length
   };
 }
+
+export async function fetchSuperManifestInfo(owner, repo, token) {
+  if (!owner || !repo || !token) return null;
+  const pathsToCheck = [
+    `${PRIMARY_BASE_PATH}/all_catalogs/manifest.json`,
+    `${SUB_BASE_PATH}/all_catalogs/manifest.json`
+  ];
+  for (const path of pathsToCheck) {
+    try {
+      const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+      const res = await fetch(url, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      if (res.ok) {
+        const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${path}`;
+        const stremioUrl = `stremio://${jsDelivrUrl.replace(/^https?:\/\//, '')}`;
+        return { jsDelivrUrl, stremioUrl };
+      }
+    } catch (e) {
+      // Continue checking next path
+    }
+  }
+  return null;
+}

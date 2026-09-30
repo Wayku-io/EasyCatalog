@@ -10,7 +10,8 @@ import {
   Zap,
   Loader2,
   PlusCircle,
-  ExternalLink
+  ExternalLink,
+  RefreshCw
 } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useToast } from './Toast';
@@ -19,6 +20,7 @@ import {
   loadCollectionData,
   deleteCollectionFromGithub,
   compileSuperManifest,
+  fetchSuperManifestInfo,
   parseRepoString
 } from '../services/github';
 
@@ -52,8 +54,14 @@ export default function CollectionsScreen({
     setLoading(true);
     try {
       const { owner, repo } = parseRepoString(config.githubRepo);
-      const list = await fetchExistingCollections(owner, repo, config.githubToken);
+      const [list, superInfo] = await Promise.all([
+        fetchExistingCollections(owner, repo, config.githubToken),
+        fetchSuperManifestInfo(owner, repo, config.githubToken)
+      ]);
       setCollections(list);
+      if (superInfo) {
+        setPackResult(superInfo);
+      }
     } catch (err) {
       console.error(err);
       addToast(err.message, 'error');
@@ -223,6 +231,26 @@ export default function CollectionsScreen({
                       {copiedPack ? <Check size={16} /> : <Copy size={16} />}
                     </button>
                   </div>
+                  <button
+                    onClick={handleCompilePack}
+                    disabled={isCompilingPack || collections.length === 0}
+                    className="btn btn-secondary"
+                    style={{
+                      width: '100%',
+                      padding: '0.55rem',
+                      fontSize: '0.82rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.4rem',
+                      color: '#fbbf24',
+                      borderColor: 'rgba(245, 158, 11, 0.4)'
+                    }}
+                    title={t('updatePackBtn')}
+                  >
+                    <RefreshCw size={13} className={isCompilingPack ? 'spinner' : ''} />
+                    <span>{isCompilingPack ? t('updatingPack') : t('updatePackBtn')}</span>
+                  </button>
                   <span style={{ fontSize: '0.75rem', color: '#fbbf24' }}>
                     {t('aioHelpTip')}
                   </span>
