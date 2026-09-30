@@ -79,13 +79,13 @@ export default function App() {
     }
   }, []);
 
-  // Config State
+  // Config State (only personal/custom user keys are stored in user state)
   const [config, setConfig] = useState(() => {
-    const tmdb = localStorage.getItem('tmdb_key') || localStorage.getItem('tmdb_api_key') || import.meta.env.VITE_TMDB_API_KEY || '';
+    const customTmdb = localStorage.getItem('tmdb_key') || localStorage.getItem('tmdb_api_key') || '';
     const token = localStorage.getItem('github_token') || '';
     const repo = localStorage.getItem('github_repo') || '';
     return {
-      tmdbKey: tmdb,
+      tmdbKey: customTmdb,
       githubToken: token,
       githubRepo: repo
     };
@@ -113,10 +113,26 @@ export default function App() {
 
   // Save config
   const handleSaveConfig = (newConfig) => {
-    localStorage.setItem('tmdb_key', newConfig.tmdbKey);
-    localStorage.setItem('tmdb_api_key', newConfig.tmdbKey);
-    localStorage.setItem('github_token', newConfig.githubToken);
-    localStorage.setItem('github_repo', newConfig.githubRepo);
+    if (newConfig.tmdbKey) {
+      localStorage.setItem('tmdb_key', newConfig.tmdbKey);
+      localStorage.setItem('tmdb_api_key', newConfig.tmdbKey);
+    } else {
+      localStorage.removeItem('tmdb_key');
+      localStorage.removeItem('tmdb_api_key');
+    }
+
+    if (newConfig.githubToken) {
+      localStorage.setItem('github_token', newConfig.githubToken);
+    } else {
+      localStorage.removeItem('github_token');
+    }
+
+    if (newConfig.githubRepo) {
+      localStorage.setItem('github_repo', newConfig.githubRepo);
+    } else {
+      localStorage.removeItem('github_repo');
+    }
+
     localStorage.setItem('gate_dismissed', 'true');
     setConfig(newConfig);
     setHasDismissedGate(true);

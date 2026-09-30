@@ -47,7 +47,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
       setTmdbKey(config.tmdbKey || '');
       setGithubToken(config.githubToken || '');
       setGithubRepo(config.githubRepo || '');
-      if (config.tmdbKey) setShowCustomTmdbInput(true);
+      setShowCustomTmdbInput(Boolean(config.tmdbKey));
     }
   }, [config, isOpen]);
 
@@ -156,6 +156,15 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
     setGithubRepo('');
     setUserProfile(null);
     setReposList([]);
+    localStorage.removeItem('github_token');
+    localStorage.removeItem('github_repo');
+    if (onSave) {
+      onSave({
+        tmdbKey: tmdbKey.trim(),
+        githubToken: '',
+        githubRepo: ''
+      });
+    }
     addToast("Compte GitHub déconnecté.", "info");
   };
 
@@ -311,6 +320,16 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                       onClick={() => {
                         setTmdbKey('');
                         setShowCustomTmdbInput(false);
+                        localStorage.removeItem('tmdb_key');
+                        localStorage.removeItem('tmdb_api_key');
+                        if (onSave) {
+                          onSave({
+                            tmdbKey: '',
+                            githubToken: githubToken.trim(),
+                            githubRepo: githubRepo.trim()
+                          });
+                        }
+                        addToast(t('resetDefaultKey'), "info");
                       }}
                       style={{
                         background: 'none',
