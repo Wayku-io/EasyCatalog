@@ -77,10 +77,10 @@ Open [easycatalog.vercel.app](https://easycatalog.vercel.app/) and click **Conne
 - Reorder titles manually or use the quick-sort dropdown (by release year, alphabetical A-Z).
 - Enter a clear name for your collection (e.g. *Christopher Nolan Essentials*, *Best Sci-Fi 90s*).
 
-### 3. Publish & Copy Your Link
+### 3. Publish & Add via Quick Add
 - Click **Publish**.
 - Your catalog and JSON manifest are instantly created and pushed to your repository.
-- Click the copy icon to get your manifest URL and paste it into **AIO Metadata**.
+- Click the copy icon to copy your manifest URL, then in **AIO Metadata**, simply click the **Quick Add** button (`🔗 Quick Add`) and paste your link. That's it!
 
 ---
 

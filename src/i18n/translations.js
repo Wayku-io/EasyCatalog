@@ -44,7 +44,7 @@ export const translations = {
     collectionsTitle: "Mes Catalogues",
     collectionsSubtitle: "Gérez vos catalogues et récupérez vos liens pour AIO Metadata.",
     allInOnePackTitle: "Tout ajouter à AIO",
-    allInOnePackDesc: "Un seul lien pour importer l'intégralité de vos catalogues en 1 clic dans AIO Metadata.",
+    allInOnePackDesc: "Un seul lien pour importer l'intégralité de vos catalogues en 1 clic via le bouton « Quick Add » d'AIO Metadata.",
     allInOnePackBtn: "Copier le lien (Tout ajouter)",
     compilePackBtn: "Tout ajouter à AIO ⚡",
     compilingPack: "Création du lien complet...",
@@ -116,7 +116,7 @@ export const translations = {
     manifestUrlLabel: "Lien à coller dans AIO Metadata :",
     copyUrl: "Copier le lien AIO Metadata",
     copied: "Copié !",
-    aioHelpTip: "💡 Collez cette URL dans la section Catalogues personnalisés de votre configuration AIO Metadata.",
+    aioHelpTip: "💡 Dans AIO Metadata, cliquez simplement sur le bouton « Quick Add » et collez votre lien !",
     installStremio: "Ou installer directement sur Stremio 🚀",
     
     // Common
@@ -167,7 +167,7 @@ export const translations = {
     collectionsTitle: "My Catalogs",
     collectionsSubtitle: "Manage your catalogs and get your AIO Metadata links.",
     allInOnePackTitle: "Add All to AIO",
-    allInOnePackDesc: "A single link to import all your catalogs in 1 click into AIO Metadata.",
+    allInOnePackDesc: "A single link to import all your catalogs at once via the « Quick Add » button in AIO Metadata.",
     allInOnePackBtn: "Copy Link (Add All)",
     compilePackBtn: "Add All to AIO ⚡",
     compilingPack: "Generating unified link...",
@@ -237,7 +237,7 @@ export const translations = {
     manifestUrlLabel: "Link to paste into AIO Metadata:",
     copyUrl: "Copy AIO Metadata Link",
     copied: "Copied!",
-    aioHelpTip: "💡 Paste this URL into the Custom Catalogs section of your AIO Metadata setup.",
+    aioHelpTip: "💡 In AIO Metadata, simply click the « Quick Add » button and paste your link!",
     installStremio: "Or install directly on Stremio 🚀",
     
     close: "Close",

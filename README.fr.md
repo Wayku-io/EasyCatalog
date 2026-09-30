@@ -77,10 +77,10 @@ Ouvrez [easycatalog.vercel.app](https://easycatalog.vercel.app/) et cliquez sur 
 - Réorganisez les éléments comme vous le souhaitez grâce au menu de tri (par année, alphabétique A-Z ou manuel).
 - Donnez un nom clair à votre collection (ex: *L'univers Star Wars*, *Films Cultes Années 90*).
 
-### 3. Publier et récupérer votre lien
+### 3. Publier et ajouter via Quick Add
 - Cliquez sur **Publier**.
 - Votre catalogue et son manifeste JSON sont immédiatement créés et enregistrés sur votre dépôt GitHub.
-- Cliquez sur l'icône de copie pour récupérer l'URL de votre manifeste et collez-la dans **AIO Metadata**.
+- Cliquez sur l'icône de copie pour récupérer l'URL de votre manifeste, puis dans **AIO Metadata**, cliquez simplement sur le bouton **Quick Add** (`🔗 Quick Add`) et collez votre lien. C'est tout !
 
 ---
 

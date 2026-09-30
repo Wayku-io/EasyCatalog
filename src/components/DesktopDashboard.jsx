@@ -864,6 +864,10 @@ export default function DesktopDashboard({
                 {copiedManifest ? <Check size={14} /> : <Copy size={14} />}
               </button>
             </div>
+
+            <div style={{ fontSize: '0.73rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
+              {t('aioHelpTip')}
+            </div>
           </div>
         )}
       </div>
