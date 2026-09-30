@@ -439,6 +439,21 @@ export default function DesktopDashboard({
                 <RefreshCw size={12} className={isCompilingPack ? 'spinner' : ''} />
                 <span>{isCompilingPack ? t('updatingPack') : t('updatePackBtn')}</span>
               </button>
+
+              {/* Notice réinstallation discrète */}
+              {packResult.isUpdate && (
+                <div style={{
+                  fontSize: '0.7rem',
+                  color: '#fbbf24',
+                  background: 'rgba(245, 158, 11, 0.1)',
+                  border: '1px solid rgba(245, 158, 11, 0.25)',
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '0.35rem 0.5rem',
+                  lineHeight: 1.3
+                }}>
+                  {t('reinstallNotice')}
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -938,6 +953,20 @@ export default function DesktopDashboard({
             <div style={{ fontSize: '0.73rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
               {t('aioHelpTip')}
             </div>
+
+            {resultData.isUpdate && (
+              <div style={{
+                fontSize: '0.73rem',
+                color: '#fbbf24',
+                background: 'rgba(245, 158, 11, 0.1)',
+                border: '1px solid rgba(245, 158, 11, 0.25)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '0.4rem 0.6rem',
+                lineHeight: 1.35
+              }}>
+                {t('reinstallNotice')}
+              </div>
+            )}
           </div>
         )}
       </div>

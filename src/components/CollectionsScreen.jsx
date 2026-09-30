@@ -254,6 +254,20 @@ export default function CollectionsScreen({
                   <span style={{ fontSize: '0.75rem', color: '#fbbf24' }}>
                     {t('aioHelpTip')}
                   </span>
+                  {packResult.isUpdate && (
+                    <div style={{
+                      marginTop: '0.2rem',
+                      background: 'rgba(245, 158, 11, 0.12)',
+                      border: '1px solid rgba(245, 158, 11, 0.3)',
+                      borderRadius: 'var(--radius-sm)',
+                      padding: '0.5rem 0.65rem',
+                      fontSize: '0.78rem',
+                      color: '#fbbf24',
+                      lineHeight: 1.4
+                    }}>
+                      {t('reinstallNotice')}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

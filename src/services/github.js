@@ -268,7 +268,26 @@ export async function deleteFile(owner, repo, token, filePath, commitMessage = `
   }
 }
 
-async function fetchDirectoriesFromPath(owner, repo, token, basePath) {
+export async function getLatestCommitRef(owner, repo, token) {
+  if (!owner || !repo || !token) return 'main';
+  try {
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/main`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.sha) return data.sha.slice(0, 7);
+    }
+  } catch (e) {
+    // fallback
+  }
+  return 'main';
+}
+
+async function fetchDirectoriesFromPath(owner, repo, token, basePath, ref = 'main') {
   const url = `https://api.github.com/repos/${owner}/${repo}/contents/${basePath}`;
   try {
     const res = await fetch(url, {
@@ -293,7 +312,7 @@ async function fetchDirectoriesFromPath(owner, repo, token, basePath) {
       .map(dir => {
         let displayName = dir.name.replace(/^custom\./, '').replace(/_/g, ' ');
         displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-        const manifestUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${dir.path}/manifest.json`;
+        const manifestUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${ref}/${dir.path}/manifest.json`;
         return {
           name: dir.name,
           displayName,
@@ -308,14 +327,16 @@ async function fetchDirectoriesFromPath(owner, repo, token, basePath) {
 }
 
 export async function fetchExistingCollections(owner, repo, token) {
+  const ref = await getLatestCommitRef(owner, repo, token);
+
   // 1. Try standard root manifests/
-  const primaryCollections = await fetchDirectoriesFromPath(owner, repo, token, PRIMARY_BASE_PATH);
+  const primaryCollections = await fetchDirectoriesFromPath(owner, repo, token, PRIMARY_BASE_PATH, ref);
   
   // 2. Also check EasyCatalog/manifests
-  const subCollections = await fetchDirectoriesFromPath(owner, repo, token, SUB_BASE_PATH);
+  const subCollections = await fetchDirectoriesFromPath(owner, repo, token, SUB_BASE_PATH, ref);
 
   // 3. Also check legacy path tools/catalog-generator/manifests if needed
-  const legacyCollections = await fetchDirectoriesFromPath(owner, repo, token, LEGACY_BASE_PATH);
+  const legacyCollections = await fetchDirectoriesFromPath(owner, repo, token, LEGACY_BASE_PATH, ref);
   
   // Merge and deduplicate by folder name (primary takes precedence)
   const seen = new Set();
@@ -374,7 +395,8 @@ export async function loadCollectionData(owner, repo, token, dirPath) {
     poster: meta.poster
   }));
 
-  const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${dirPath}/manifest.json`;
+  const ref = await getLatestCommitRef(owner, repo, token);
+  const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${ref}/${dirPath}/manifest.json`;
 
   return {
     path: dirPath,
@@ -458,14 +480,18 @@ export async function publishCollection(owner, repo, token, catalogName, items, 
     }
   }
 
-  await pushFile(owner, repo, token, manifestPath, manifest, `EasyCatalog: Update manifest for ${catalogName}`);
+  const putManifestRes = await pushFile(owner, repo, token, manifestPath, manifest, `EasyCatalog: Update manifest for ${catalogName}`);
+  let lastCommitSha = putManifestRes?.commit?.sha;
 
   const updatedCatalogPaths = [];
   for (const type of uniqueTypes) {
     const typeMetas = metas.filter(m => m.type === type);
     const catalogObj = { metas: typeMetas };
     const catPath = `${newDirPath}/catalog/${type}/${cleanId}.json`;
-    await pushFile(owner, repo, token, catPath, catalogObj, `EasyCatalog: Update ${type} catalog for ${catalogName}`);
+    const putCatRes = await pushFile(owner, repo, token, catPath, catalogObj, `EasyCatalog: Update ${type} catalog for ${catalogName}`);
+    if (putCatRes?.commit?.sha) {
+      lastCommitSha = putCatRes.commit.sha;
+    }
     updatedCatalogPaths.push(catPath);
   }
 
@@ -487,14 +513,17 @@ export async function publishCollection(owner, repo, token, catalogName, items, 
     await purgeJsDelivrCache(owner, repo, pathsToPurge);
   }
 
-  const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${manifestPath}`;
+  const ref = lastCommitSha ? lastCommitSha.slice(0, 7) : 'main';
+  const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${ref}/${manifestPath}`;
   const stremioUrl = `stremio://${jsDelivrUrl.replace(/^https?:\/\//, '')}`;
 
   return {
     id: cleanId,
     path: newDirPath,
     jsDelivrUrl,
-    stremioUrl
+    stremioUrl,
+    isUpdate,
+    commitSha: ref
   };
 }
 
@@ -560,30 +589,38 @@ export async function compileSuperManifest(owner, repo, token) {
   };
 
   const superManifestPath = `${PRIMARY_BASE_PATH}/all_catalogs/manifest.json`;
-  await pushFile(owner, repo, token, superManifestPath, superManifest, "EasyCatalog: Update all-in-one pack");
+  const putSuperRes = await pushFile(owner, repo, token, superManifestPath, superManifest, "EasyCatalog: Update all-in-one pack");
+  let lastCommitSha = putSuperRes?.commit?.sha;
 
   const pushedCatalogPaths = [];
   for (const cf of allCatalogFiles) {
     const catPath = `${PRIMARY_BASE_PATH}/all_catalogs/catalog/${cf.type}/${cf.id}.json`;
-    await pushFile(owner, repo, token, catPath, cf.contentObj, `EasyCatalog: Update all-in-one pack catalog ${cf.id}`);
+    const putCatRes = await pushFile(owner, repo, token, catPath, cf.contentObj, `EasyCatalog: Update all-in-one pack catalog ${cf.id}`);
+    if (putCatRes?.commit?.sha) {
+      lastCommitSha = putCatRes.commit.sha;
+    }
     pushedCatalogPaths.push(catPath);
   }
 
   // Purge jsDelivr cache automatically for the Super Manifest and all consolidated catalog files
   await purgeJsDelivrCache(owner, repo, [superManifestPath, ...pushedCatalogPaths]);
 
-  const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${superManifestPath}`;
+  const ref = lastCommitSha ? lastCommitSha.slice(0, 7) : 'main';
+  const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${ref}/${superManifestPath}`;
   const stremioUrl = `stremio://${jsDelivrUrl.replace(/^https?:\/\//, '')}`;
 
   return {
     jsDelivrUrl,
     stremioUrl,
-    catalogCount: allCatalogs.length
+    catalogCount: allCatalogs.length,
+    isUpdate: true,
+    commitSha: ref
   };
 }
 
 export async function fetchSuperManifestInfo(owner, repo, token) {
   if (!owner || !repo || !token) return null;
+  const ref = await getLatestCommitRef(owner, repo, token);
   const pathsToCheck = [
     `${PRIMARY_BASE_PATH}/all_catalogs/manifest.json`,
     `${SUB_BASE_PATH}/all_catalogs/manifest.json`
@@ -598,7 +635,7 @@ export async function fetchSuperManifestInfo(owner, repo, token) {
         }
       });
       if (res.ok) {
-        const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${path}`;
+        const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${ref}/${path}`;
         const stremioUrl = `stremio://${jsDelivrUrl.replace(/^https?:\/\//, '')}`;
         return { jsDelivrUrl, stremioUrl };
       }

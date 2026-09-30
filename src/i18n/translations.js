@@ -174,6 +174,7 @@ export const translations = {
     copyUrl: "Copier le lien AIO Metadata",
     copied: "Copié !",
     aioHelpTip: "💡 Dans AIO Metadata, cliquez simplement sur le bouton « Quick Add » et collez votre lien !",
+    reinstallNotice: "⚠️ Réinstallation requise : collez ce nouveau lien dans AIO Metadata (et supprimez l'ancien) pour appliquer les modifications.",
     installStremio: "Ou installer directement sur Stremio 🚀",
     
     // Common
@@ -352,6 +353,7 @@ export const translations = {
     copyUrl: "Copy AIO Metadata Link",
     copied: "Copied!",
     aioHelpTip: "💡 In AIO Metadata, simply click the « Quick Add » button and paste your link!",
+    reinstallNotice: "⚠️ Reinstallation required: paste this new link into AIO Metadata (and remove the old one) to apply changes.",
     installStremio: "Or install directly on Stremio 🚀",
     
     close: "Close",
@@ -524,6 +526,7 @@ export const translations = {
     copyUrl: "Copiar enlace AIO Metadata",
     copied: "¡Copiado!",
     aioHelpTip: "💡 En AIO Metadata, haz clic en el botón « Quick Add » y pega tu enlace.",
+    reinstallNotice: "⚠️ Reinstalación requerida: pega este nuevo enlace en AIO Metadata (y elimina el anterior) para aplicar los cambios.",
     installStremio: "O instalar directamente en Stremio 🚀",
     close: "Cerrar",
     back: "Volver",
@@ -695,6 +698,7 @@ export const translations = {
     copyUrl: "Copiar link AIO Metadata",
     copied: "Copiado!",
     aioHelpTip: "💡 No AIO Metadata, basta clicar no botão « Quick Add » e colar seu link!",
+    reinstallNotice: "⚠️ Reinstalação necessária: cole este novo link no AIO Metadata (e remova o antigo) para aplicar as alterações.",
     installStremio: "Ou instalar diretamente no Stremio 🚀",
     close: "Fechar",
     back: "Voltar",

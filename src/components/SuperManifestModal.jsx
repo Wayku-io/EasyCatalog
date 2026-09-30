@@ -100,6 +100,21 @@ export default function SuperManifestModal({ isOpen, onClose, config }) {
               </button>
             </div>
 
+            {result.isUpdate && (
+              <div style={{
+                marginBottom: '1rem',
+                background: 'rgba(245, 158, 11, 0.12)',
+                border: '1px solid rgba(245, 158, 11, 0.3)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '0.5rem 0.65rem',
+                fontSize: '0.78rem',
+                color: '#fbbf24',
+                lineHeight: 1.4
+              }}>
+                {t('reinstallNotice')}
+              </div>
+            )}
+
             <a
               href={result.stremioUrl}
               className="btn btn-secondary"

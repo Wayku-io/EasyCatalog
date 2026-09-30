@@ -361,6 +361,21 @@ export default function BuilderScreen({
           }}>
             {t('aioHelpTip')}
           </div>
+
+          {resultData.isUpdate && (
+            <div style={{
+              marginTop: '0.65rem',
+              background: 'rgba(245, 158, 11, 0.1)',
+              border: '1px solid rgba(245, 158, 11, 0.25)',
+              borderRadius: 'var(--radius-md)',
+              padding: '0.65rem 0.85rem',
+              fontSize: '0.78rem',
+              color: '#fbbf24',
+              lineHeight: 1.4
+            }}>
+              {t('reinstallNotice')}
+            </div>
+          )}
         </div>
       )}
     </div>
