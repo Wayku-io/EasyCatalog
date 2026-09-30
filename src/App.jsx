@@ -81,7 +81,7 @@ export default function App() {
 
   // Config State
   const [config, setConfig] = useState(() => {
-    const tmdb = localStorage.getItem('tmdb_key') || localStorage.getItem('tmdb_api_key') || '';
+    const tmdb = localStorage.getItem('tmdb_key') || localStorage.getItem('tmdb_api_key') || import.meta.env.VITE_TMDB_API_KEY || '';
     const token = localStorage.getItem('github_token') || '';
     const repo = localStorage.getItem('github_repo') || '';
     return {

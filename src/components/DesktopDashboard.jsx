@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useToast } from './Toast';
-import { searchTMDB } from '../services/tmdb';
+import { searchTMDB, getEffectiveTmdbKey } from '../services/tmdb';
 import {
   fetchExistingCollections,
   loadCollectionData,
@@ -108,6 +108,8 @@ export default function DesktopDashboard({
     }
   }, [normalizedLockedType, mediaType]);
 
+  const effectiveTmdbKey = getEffectiveTmdbKey(config?.tmdbKey);
+
   // TMDB live search with debounce
   useEffect(() => {
     if (!query.trim()) {
@@ -121,7 +123,7 @@ export default function DesktopDashboard({
 
     searchTimeoutRef.current = setTimeout(async () => {
       try {
-        const res = await searchTMDB(query, mediaType, config.tmdbKey, language);
+        const res = await searchTMDB(query, mediaType, effectiveTmdbKey, language);
         setResults(res);
       } catch (err) {
         console.error('TMDB Search error', err);
@@ -134,7 +136,7 @@ export default function DesktopDashboard({
     return () => {
       if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
     };
-  }, [query, mediaType, config.tmdbKey, language]);
+  }, [query, mediaType, effectiveTmdbKey, language]);
 
 
   const handleOpenCollection = async (col) => {
@@ -583,7 +585,7 @@ export default function DesktopDashboard({
 
         {/* Grille de résultats TMDB */}
         <div style={{ flex: 1, overflowY: 'auto', paddingRight: '0.25rem' }}>
-          {!config.tmdbKey ? (
+          {!effectiveTmdbKey ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-secondary)' }}>
               <Film size={36} color="var(--accent-light)" style={{ opacity: 0.5, margin: '0 auto 0.75rem' }} />
               <h4 style={{ color: '#fff', marginBottom: '0.35rem' }}>Clé API TMDB requise</h4>

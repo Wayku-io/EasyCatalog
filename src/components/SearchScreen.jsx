@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search, Film, Tv, Check, Plus, ArrowRight, ArrowLeft, Loader2, X, Sparkles, Lock, Ban } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useToast } from './Toast';
-import { searchTMDB } from '../services/tmdb';
+import { searchTMDB, getEffectiveTmdbKey } from '../services/tmdb';
 
 export default function SearchScreen({
   apiKey,
@@ -28,6 +28,8 @@ export default function SearchScreen({
   const [loading, setLoading] = useState(false);
   const searchTimeoutRef = useRef(null);
 
+  const effectiveTmdbKey = getEffectiveTmdbKey(apiKey);
+
   // Sync mediaType if lockedType changes
   useEffect(() => {
     if (normalizedLockedType && mediaType !== normalizedLockedType) {
@@ -47,7 +49,7 @@ export default function SearchScreen({
 
     searchTimeoutRef.current = setTimeout(async () => {
       try {
-        const res = await searchTMDB(query, mediaType, apiKey, language);
+        const res = await searchTMDB(query, mediaType, effectiveTmdbKey, language);
         setResults(res);
       } catch (err) {
         console.error('TMDB Search error', err);
@@ -60,7 +62,7 @@ export default function SearchScreen({
     return () => {
       if (searchTimeoutRef.current) clearTimeout(searchTimeoutRef.current);
     };
-  }, [query, mediaType, apiKey, language]);
+  }, [query, mediaType, effectiveTmdbKey, language]);
 
   const isSelected = (itemId) => {
     return selectedItems.some(i => i.id === itemId);
@@ -146,7 +148,7 @@ export default function SearchScreen({
       </div>
 
       {/* Results Section */}
-      {!apiKey ? (
+      {!effectiveTmdbKey ? (
         <div className="glass-panel" style={{ textAlign: 'center', padding: '3rem 1.25rem' }}>
           <Film size={40} color="var(--accent-light)" style={{ opacity: 0.5, margin: '0 auto 0.75rem' }} />
           <h3 style={{ color: '#fff', marginBottom: '0.35rem', fontSize: '1.15rem' }}>{t('tmdbKeyRequiredTitle')}</h3>

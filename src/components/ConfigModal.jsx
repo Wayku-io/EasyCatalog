@@ -21,11 +21,14 @@ import {
   createDefaultRepo,
   loginWithGitHub
 } from '../services/github';
+import { hasGlobalTmdbKey } from '../services/tmdb';
 
 export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onClose, onSkip, onOpenLegal }) {
   const { t, language, setLanguage } = useLanguage();
   const { addToast } = useToast();
 
+  const hasGlobalTmdb = hasGlobalTmdbKey();
+  const [showCustomTmdbInput, setShowCustomTmdbInput] = useState(() => Boolean(config?.tmdbKey));
   const [tmdbKey, setTmdbKey] = useState('');
   const [githubToken, setGithubToken] = useState('');
   const [githubRepo, setGithubRepo] = useState('');
@@ -44,6 +47,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
       setTmdbKey(config.tmdbKey || '');
       setGithubToken(config.githubToken || '');
       setGithubRepo(config.githubRepo || '');
+      if (config.tmdbKey) setShowCustomTmdbInput(true);
     }
   }, [config, isOpen]);
 
@@ -248,36 +252,104 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
             </select>
           </div>
 
-          {/* 2. TMDB API Key (Optional) */}
-          <div className="form-group">
-            <div className="form-label">
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                <Key size={15} color="var(--emerald)" />
-                {t('tmdbKeyLabel')}
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>(optionnel)</span>
-              </span>
-              <a
-                href="https://www.themoviedb.org/settings/api"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: 'var(--emerald)', textDecoration: 'none', fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: '0.2rem' }}
+          {/* 2. TMDB API Key (Optional with clean accordion) */}
+          {hasGlobalTmdb && !showCustomTmdbInput && !tmdbKey ? (
+            <div style={{
+              background: 'rgba(16, 185, 129, 0.05)',
+              border: '1px solid rgba(16, 185, 129, 0.2)',
+              borderRadius: 'var(--radius-md)',
+              padding: '0.85rem 1rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '0.75rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                <CheckCircle2 size={18} color="var(--emerald)" style={{ flexShrink: 0 }} />
+                <div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fff' }}>
+                    Recherche TMDB active
+                  </div>
+                  <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
+                    Clé fournie par le site pour tous vos visiteurs
+                  </div>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowCustomTmdbInput(true)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.06)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  color: 'var(--text-secondary)',
+                  fontSize: '0.74rem',
+                  fontWeight: 500,
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '0.35rem 0.65rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  whiteSpace: 'nowrap'
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
               >
-                <span>{t('tmdbKeyLink')}</span>
-                <ExternalLink size={12} />
-              </a>
+                Utiliser ma propre clé
+              </button>
             </div>
-            <input
-              type="password"
-              className="glass-input"
-              value={tmdbKey}
-              onChange={(e) => setTmdbKey(e.target.value)}
-              placeholder="Clé par défaut active (ou renseignez votre propre clé)"
-              autoComplete="off"
-            />
-            <span className="form-help">
-              Une clé publique par défaut est déjà active pour rechercher films et séries. Renseignez ce champ uniquement si vous souhaitez utiliser votre propre clé personnelle TMDB.
-            </span>
-          </div>
+          ) : (
+            <div className="form-group">
+              <div className="form-label">
+                <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Key size={15} color="var(--emerald)" />
+                  {t('tmdbKeyLabel')}
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>(personnelle)</span>
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  {hasGlobalTmdb && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTmdbKey('');
+                        setShowCustomTmdbInput(false);
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--emerald)',
+                        fontSize: '0.72rem',
+                        cursor: 'pointer',
+                        padding: 0
+                      }}
+                    >
+                      Revenir à la clé par défaut
+                    </button>
+                  )}
+                  <a
+                    href="https://www.themoviedb.org/settings/api"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'var(--emerald)', textDecoration: 'none', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.2rem' }}
+                  >
+                    <span>{t('tmdbKeyLink')}</span>
+                    <ExternalLink size={11} />
+                  </a>
+                </div>
+              </div>
+              <input
+                type="password"
+                className="glass-input"
+                value={tmdbKey}
+                onChange={(e) => setTmdbKey(e.target.value)}
+                placeholder="Collez votre clé API v3 personnelle..."
+                autoComplete="off"
+              />
+              <span className="form-help">
+                {hasGlobalTmdb
+                  ? "Votre clé personnelle prendra la priorité sur la clé globale fournie par le site."
+                  : "Renseignez votre clé pour rechercher films et séries en direct."}
+              </span>
+            </div>
+          )}
 
           {/* 3. GITHUB 1-CLICK CONNECTION ONLY */}
           <div style={{

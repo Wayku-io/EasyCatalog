@@ -1,7 +1,15 @@
 // TMDB API Service
 
+export function getEffectiveTmdbKey(apiKey) {
+  return (apiKey && apiKey.trim()) || import.meta.env.VITE_TMDB_API_KEY || '';
+}
+
+export function hasGlobalTmdbKey() {
+  return Boolean(import.meta.env.VITE_TMDB_API_KEY);
+}
+
 export async function searchTMDB(query, type = 'movie', apiKey, lang = 'fr') {
-  const effectiveKey = apiKey || import.meta.env.VITE_TMDB_API_KEY || '';
+  const effectiveKey = getEffectiveTmdbKey(apiKey);
   if (!query || !query.trim() || !effectiveKey) return [];
 
   const tmdbLang = lang === 'fr' ? 'fr-FR' : lang === 'es' ? 'es-ES' : lang === 'pt' ? 'pt-BR' : 'en-US';
