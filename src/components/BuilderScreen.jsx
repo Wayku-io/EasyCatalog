@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useToast } from './Toast';
+import SortDropdown from './SortDropdown';
 
 export default function BuilderScreen({
   catalogName,
@@ -65,8 +66,8 @@ export default function BuilderScreen({
   };
 
   // Handle Sort Change
-  const handleSortChange = (e) => {
-    const val = e.target.value;
+  const handleSortChange = (newVal) => {
+    const val = typeof newVal === 'string' ? newVal : newVal?.target?.value;
     setSortOption(val);
 
     if (val === 'manual') return;
@@ -169,24 +170,7 @@ export default function BuilderScreen({
           </button>
 
           {/* Quick Sort Dropdown */}
-          <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-            <select
-              value={sortOption}
-              onChange={handleSortChange}
-              className="btn btn-secondary"
-              style={{
-                cursor: 'pointer',
-                fontSize: '0.825rem',
-                minHeight: '42px',
-                padding: '0.4rem 0.65rem'
-              }}
-            >
-              <option value="manual" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>{t('sortManual')}</option>
-              <option value="year-asc" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>{t('sortYearAsc')}</option>
-              <option value="year-desc" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>{t('sortYearDesc')}</option>
-              <option value="alpha" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>{t('sortAlpha')}</option>
-            </select>
-          </div>
+          <SortDropdown value={sortOption} onChange={handleSortChange} />
 
           {items.length > 0 && (
             <button

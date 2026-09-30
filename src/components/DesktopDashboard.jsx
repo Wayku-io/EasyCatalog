@@ -23,6 +23,7 @@ import {
 import { useLanguage } from '../i18n/LanguageContext';
 import { useToast } from './Toast';
 import { searchTMDB, getEffectiveTmdbKey } from '../services/tmdb';
+import SortDropdown from './SortDropdown';
 import {
   fetchExistingCollections,
   loadCollectionData,
@@ -252,8 +253,8 @@ export default function DesktopDashboard({
     setSelectedItems(prev => prev.filter(i => i.id !== id));
   };
 
-  const handleSortChange = (e) => {
-    const val = e.target.value;
+  const handleSortChange = (newVal) => {
+    const val = typeof newVal === 'string' ? newVal : newVal?.target?.value;
     setSortOption(val);
     if (val === 'manual') return;
 
@@ -709,17 +710,7 @@ export default function DesktopDashboard({
 
         {/* Barre d'outils tri & vider */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-          <select
-            value={sortOption}
-            onChange={handleSortChange}
-            className="btn btn-secondary"
-            style={{ flex: 1, minHeight: '34px', fontSize: '0.78rem', padding: '0.3rem 0.5rem', cursor: 'pointer' }}
-          >
-            <option value="manual" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>Tri : Manuel</option>
-            <option value="year-asc" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>Année (Ancien ➔ Récent)</option>
-            <option value="year-desc" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>Année (Récent ➔ Ancien)</option>
-            <option value="alpha" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>Ordre alphabétique A-Z</option>
-          </select>
+          <SortDropdown value={sortOption} onChange={handleSortChange} />
 
           {selectedItems.length > 0 && (
             <button
