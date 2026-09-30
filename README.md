@@ -3,7 +3,7 @@
   <h1>🎬 EasyCatalog</h1>
 
   <p>
-    <strong>The modern streaming catalog builder for AIOStreams, Nuvio, and Stremio.</strong>
+    <strong>The modern streaming catalog builder for AIO Metadata.</strong>
   </p>
 
   <p>
@@ -35,13 +35,13 @@
 
 **EasyCatalog** is a free visual studio designed to make creating custom streaming catalogs effortless. 
 
-Previously, creating custom catalogs for **AIO Metadata (AIOStreams)**, **Nuvio**, or **Stremio** required writing complex JSON files by hand, finding IMDb/TMDB IDs individually, and hosting files on servers.
+Previously, creating custom catalogs for **AIO Metadata** required writing complex JSON files by hand, finding IMDb/TMDB IDs individually, and hosting files on servers.
 
 **EasyCatalog automates the entire process into a clean 1-click web interface:**
-- 🔍 **Search** any movie or TV series with live posters and details.
+- 🔍 **Search** movies and TV series by title, poster, and release year.
 - 🎨 **Build & Organize** your custom lists with sorting and reordering tools.
 - 🚀 **Publish in 1 Click**: Manifests and catalogs are generated directly on your own GitHub account and served via ultra-fast global CDN caching.
-- 🔗 **Add to your player**: Simply copy your manifest link into AIOStreams, Nuvio, or Stremio.
+- 🔗 **Add to AIO Metadata**: Copy your generated manifest link directly into **AIO Metadata**.
 
 👉 **Launch EasyCatalog now:** [https://easycatalog.vercel.app/](https://easycatalog.vercel.app/)
 
@@ -51,22 +51,22 @@ Previously, creating custom catalogs for **AIO Metadata (AIOStreams)**, **Nuvio*
 
 | Feature | Description |
 | :--- | :--- |
-| **🔍 Live TMDB Search** | Search millions of movies and series instantly with posters, release dates, and synopses. No configuration needed! |
+| **🔍 Live TMDB Search** | Search movies and series by title, poster, and release year. Ready to use with zero setup! |
 | **🐙 1-Click GitHub Connect** | Connect your GitHub account securely via official OAuth without manual tokens or complex setup. |
 | **📁 Dedicated Storage Choice** | Select any of your existing GitHub repositories or create a dedicated one (e.g. `nuvio-catalogs`) in 1 click. |
 | **🎛️ Desktop Studio Dashboard** | 3-column layout built for productivity: **My Collections** (left), **TMDB Search** (center), and **Live Editor** (right). |
 | **📱 Full Mobile Support** | Responsive interface on iOS & Android with smooth step-by-step navigation. |
-| **📦 All-In-One Pack ("Super Manifest")** | Compile all your individual catalogs into a single unified manifest link to import your entire library at once. |
+| **🔗 Add All in One Link** | Group all your catalogs under a single unified link to import everything into AIO Metadata in one click. |
 | **⚡ Global CDN Delivery** | Zero server maintenance: catalogs are served worldwide through jsDelivr's high-speed CDN. |
 | **🌍 Multi-language UI** | Available in 🇬🇧 English, 🇫🇷 French, 🇪🇸 Spanish, and 🇵🇹 Portuguese. |
-| **🔒 Stremio Addon Compliant** | Strict type management ensuring 100% compliance with Stremio and AIOStreams manifest standards. |
+| **🔒 Stremio / Nuvio Standard Compliance** | Strict movie/series type separation ensuring 100% compliance with Stremio and Nuvio player specifications. |
 
 ---
 
 ## 📖 How to Use
 
 ### 1. Connect with GitHub
-Open [easycatalog.vercel.app](https://easycatalog.vercel.app/) and click **Connect with GitHub**. Authenticate once to link your account. You can pick an existing repository or create a dedicated one (like `nuvio-catalogs`) right from the settings.
+Open [easycatalog.vercel.app](https://easycatalog.vercel.app/) and click **Connect with GitHub**. Authenticate once to link your account. In the settings (⚙️), you can select an existing repository or create a dedicated one (like `nuvio-catalogs`).
 
 ### 2. Search & Compose Your Catalog
 - Choose **Movies** or **Series** mode.
@@ -77,7 +77,7 @@ Open [easycatalog.vercel.app](https://easycatalog.vercel.app/) and click **Conne
 ### 3. Publish & Copy Your Link
 - Click **Publish**.
 - Your catalog and JSON manifest are instantly created and pushed to your repository.
-- Click **Copy Link** to grab your CDN manifest URL and paste it into **AIOStreams** or **Nuvio**.
+- Click the copy icon to get your manifest URL and paste it into **AIO Metadata**.
 
 ---
 
@@ -86,10 +86,10 @@ Open [easycatalog.vercel.app](https://easycatalog.vercel.app/) and click **Conne
 ```mermaid
 graph LR
     User([User]) -->|1. Search & Build| App[EasyCatalog Web App]
-    TMDB[(TMDB Database)] -->|Metadata & Posters| App
+    TMDB[(TMDB Database)] -->|Title, Poster, Year| App
     App -->|2. 1-Click Publish| GitHub[(Your Personal GitHub Repo)]
     GitHub -->|3. Global Edge Cache| jsDelivr[jsDelivr CDN]
-    jsDelivr -->|4. Manifest URL| Player[AIOStreams / Nuvio / Stremio]
+    jsDelivr -->|4. Manifest URL| AIO[AIO Metadata]
 ```
 
 - **Full Data Ownership**: Your catalogs belong entirely to you and live on your personal GitHub account.
@@ -109,4 +109,4 @@ EasyCatalog is free and open-source. If you enjoy using it, you can support deve
 ## 📄 License & Legal
 
 Distributed under the [MIT License](LICENSE).  
-This application is an independent community tool and is not officially affiliated with Stremio, Nuvio, AIOStreams, or TMDB.
+This application is an independent community tool and is not officially affiliated with Stremio, Nuvio, or TMDB.

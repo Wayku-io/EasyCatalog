@@ -61,7 +61,7 @@ Ce produit utilise l'API TMDB mais n'est ni sponsorisé, ni certifié, ni approu
 
 ### Propriété Intellectuelle & Marques
 - **Stremio** est une marque déposée de Smart Code OOD.
-- **Nuvio**, **AIOStreams**, **GitHub** et **TMDB** sont des marques et des dénominations appartenant à leurs propriétaires respectifs.
+- **Nuvio**, **GitHub** et **TMDB** sont des marques et des dénominations appartenant à leurs propriétaires respectifs.
 - L'utilisation de ces noms a pour seul but d'indiquer la compatibilité technique du format de fichier produit et n'implique aucune affiliation ou partenariat commercial.
 
 ### Responsabilité de l'Utilisateur

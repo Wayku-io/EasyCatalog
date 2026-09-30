@@ -275,7 +275,7 @@ export default function LegalModal({ isOpen, onClose }) {
                   2. Marques et Décharge
                 </h3>
                 <p style={{ margin: 0 }}>
-                  Stremio, Nuvio, AIOStreams, TMDB et GitHub sont des marques déposées et la propriété exclusive de leurs détenteurs respectifs. EasyCatalog est un outil tiers indépendant sans lien capitalistique ni commercial avec ces entités.
+                  Stremio, Nuvio, TMDB et GitHub sont des marques déposées et la propriété exclusive de leurs détenteurs respectifs. EasyCatalog est un outil tiers indépendant sans lien capitalistique ni commercial avec ces entités.
                 </p>
               </div>
 
