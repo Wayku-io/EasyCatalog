@@ -205,10 +205,36 @@ export async function pushFile(owner, repo, token, filePath, contentObj, commitM
     throw new Error(`Erreur GitHub API (${putRes.status}): ${errText}`);
   }
 
-  // Purge jsDelivr cache asynchronously
-  fetch(`https://purge.jsdelivr.net/gh/${owner}/${repo}@main/${filePath}`).catch(() => {});
-  
   return await putRes.json();
+}
+
+/**
+ * Purge jsDelivr CDN cache for specific file paths.
+ * Waits a short buffer (~1.8s) for GitHub main branch commit propagation
+ * to ensure jsDelivr CDN fetches the latest commit when purging.
+ */
+export async function purgeJsDelivrCache(owner, repo, paths) {
+  if (!paths || paths.length === 0) return;
+
+  const uniquePaths = [...new Set(paths.filter(Boolean).map(p => p.startsWith('/') ? p.slice(1) : p))];
+  if (uniquePaths.length === 0) return;
+
+  // Buffer to guarantee GitHub's refs/heads/main has propagated
+  await new Promise(resolve => setTimeout(resolve, 1800));
+
+  const BATCH_SIZE = 6;
+  for (let i = 0; i < uniquePaths.length; i += BATCH_SIZE) {
+    const batch = uniquePaths.slice(i, i + BATCH_SIZE);
+    await Promise.allSettled(
+      batch.map(async (filePath) => {
+        try {
+          await fetch(`https://purge.jsdelivr.net/gh/${owner}/${repo}@main/${filePath}`);
+        } catch (e) {
+          console.warn(`Purge failed for ${filePath}:`, e);
+        }
+      })
+    );
+  }
 }
 
 export async function deleteFile(owner, repo, token, filePath, commitMessage = `Delete ${filePath}`) {
@@ -240,8 +266,6 @@ export async function deleteFile(owner, repo, token, filePath, commitMessage = `
     const errText = await delRes.text();
     throw new Error(`Erreur suppression (${delRes.status}): ${errText}`);
   }
-
-  fetch(`https://purge.jsdelivr.net/gh/${owner}/${repo}@main/${filePath}`).catch(() => {});
 }
 
 async function fetchDirectoriesFromPath(owner, repo, token, basePath) {
@@ -367,15 +391,19 @@ export async function deleteCollectionFromGithub(owner, repo, token, dirPath) {
     headers: { 'Authorization': `Bearer ${token}` }
   });
   
+  const pathsToPurge = [`${dirPath}/manifest.json`];
   if (getRes.ok) {
     const fileData = await getRes.json();
     const mObj = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
     for (const cat of (mObj.catalogs || [])) {
-      await deleteFile(owner, repo, token, `${dirPath}/catalog/${cat.type}/${cat.id}.json`);
+      const catPath = `${dirPath}/catalog/${cat.type}/${cat.id}.json`;
+      pathsToPurge.push(catPath);
+      await deleteFile(owner, repo, token, catPath);
     }
   }
   
   await deleteFile(owner, repo, token, `${dirPath}/manifest.json`, `EasyCatalog: Delete collection ${dirPath}`);
+  await purgeJsDelivrCache(owner, repo, pathsToPurge);
 }
 
 export async function publishCollection(owner, repo, token, catalogName, items, oldDirPath = null) {
@@ -411,13 +439,34 @@ export async function publishCollection(owner, repo, token, catalogName, items, 
 
   const newDirPath = `${PRIMARY_BASE_PATH}/${cleanId}`;
   const manifestPath = `${newDirPath}/manifest.json`;
+
+  // Detect whether this is an update to an existing collection or a new creation
+  let isUpdate = Boolean(oldDirPath);
+  if (!isUpdate) {
+    try {
+      const checkRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${manifestPath}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      if (checkRes.ok) {
+        isUpdate = true;
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+
   await pushFile(owner, repo, token, manifestPath, manifest, `EasyCatalog: Update manifest for ${catalogName}`);
 
+  const updatedCatalogPaths = [];
   for (const type of uniqueTypes) {
     const typeMetas = metas.filter(m => m.type === type);
     const catalogObj = { metas: typeMetas };
     const catPath = `${newDirPath}/catalog/${type}/${cleanId}.json`;
     await pushFile(owner, repo, token, catPath, catalogObj, `EasyCatalog: Update ${type} catalog for ${catalogName}`);
+    updatedCatalogPaths.push(catPath);
   }
 
   // If renaming an existing collection (old directory differs from new directory), purge old files
@@ -427,6 +476,15 @@ export async function publishCollection(owner, repo, token, catalogName, items, 
     } catch (err) {
       console.warn("Could not delete previous collection path:", err);
     }
+  }
+
+  // Purge jsDelivr cache automatically ONLY when updating an existing collection
+  if (isUpdate) {
+    const pathsToPurge = [manifestPath, ...updatedCatalogPaths];
+    if (oldDirPath && oldDirPath !== newDirPath) {
+      pathsToPurge.push(`${oldDirPath}/manifest.json`);
+    }
+    await purgeJsDelivrCache(owner, repo, pathsToPurge);
   }
 
   const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${manifestPath}`;
@@ -504,10 +562,15 @@ export async function compileSuperManifest(owner, repo, token) {
   const superManifestPath = `${PRIMARY_BASE_PATH}/all_catalogs/manifest.json`;
   await pushFile(owner, repo, token, superManifestPath, superManifest, "EasyCatalog: Update all-in-one pack");
 
+  const pushedCatalogPaths = [];
   for (const cf of allCatalogFiles) {
     const catPath = `${PRIMARY_BASE_PATH}/all_catalogs/catalog/${cf.type}/${cf.id}.json`;
     await pushFile(owner, repo, token, catPath, cf.contentObj, `EasyCatalog: Update all-in-one pack catalog ${cf.id}`);
+    pushedCatalogPaths.push(catPath);
   }
+
+  // Purge jsDelivr cache automatically for the Super Manifest and all consolidated catalog files
+  await purgeJsDelivrCache(owner, repo, [superManifestPath, ...pushedCatalogPaths]);
 
   const jsDelivrUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${superManifestPath}`;
   const stremioUrl = `stremio://${jsDelivrUrl.replace(/^https?:\/\//, '')}`;
