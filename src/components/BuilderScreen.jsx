@@ -97,6 +97,7 @@ export default function BuilderScreen({
   const handleClear = () => {
     if (window.confirm(t('clearConfirm'))) {
       setItems([]);
+      setCatalogName('');
       onReset();
     }
   };
@@ -314,25 +315,10 @@ export default function BuilderScreen({
             padding: '0.65rem 0.85rem',
             fontSize: '0.8rem',
             color: 'var(--text-secondary)',
-            marginBottom: '0.85rem',
             lineHeight: 1.45
           }}>
             {t('aioHelpTip')}
           </div>
-
-          <a
-            href={resultData.stremioUrl}
-            className="btn btn-secondary"
-            style={{
-              width: '100%',
-              fontSize: '0.825rem',
-              minHeight: '38px',
-              padding: '0.5rem'
-            }}
-          >
-            <ExternalLink size={15} />
-            <span>{t('installStremio')}</span>
-          </a>
         </div>
       )}
     </div>

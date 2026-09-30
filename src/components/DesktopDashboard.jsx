@@ -712,14 +712,17 @@ export default function DesktopDashboard({
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
           <SortDropdown value={sortOption} onChange={handleSortChange} />
 
-          {selectedItems.length > 0 && (
+          {(selectedItems.length > 0 || catalogName || resultData) && (
             <button
               onClick={() => {
-                if (window.confirm("Vider la liste en cours ?")) setSelectedItems([]);
+                if (window.confirm("Vider et réinitialiser le catalogue en cours ?")) {
+                  handleResetBuilder();
+                  addToast("Catalogue réinitialisé à zéro.", "info");
+                }
               }}
               className="btn btn-danger btn-icon-only"
               style={{ width: '34px', height: '34px', flexShrink: 0 }}
-              title="Vider"
+              title="Vider et repartir de zéro"
             >
               <Trash2 size={14} />
             </button>
@@ -861,15 +864,6 @@ export default function DesktopDashboard({
                 {copiedManifest ? <Check size={14} /> : <Copy size={14} />}
               </button>
             </div>
-
-            <a
-              href={resultData.stremioUrl}
-              className="btn btn-secondary"
-              style={{ width: '100%', minHeight: '30px', fontSize: '0.75rem', padding: '0.25rem' }}
-            >
-              <ExternalLink size={12} />
-              <span>Installer directement dans Stremio 🚀</span>
-            </a>
           </div>
         )}
       </div>
