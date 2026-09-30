@@ -8,7 +8,10 @@ import {
   Coffee,
   LogOut,
   CheckCircle2,
-  Scale
+  Scale,
+  Loader2,
+  RefreshCw,
+  Plus
 } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useToast } from './Toast';
@@ -30,6 +33,11 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
 
   // Auto-detection state
   const [userProfile, setUserProfile] = useState(null);
+  const [reposList, setReposList] = useState([]);
+  const [isLoadingRepos, setIsLoadingRepos] = useState(false);
+  const [showCreateRepo, setShowCreateRepo] = useState(false);
+  const [newRepoName, setNewRepoName] = useState('nuvio-catalogs');
+  const [isCreatingRepo, setIsCreatingRepo] = useState(false);
 
   useEffect(() => {
     if (config) {
@@ -54,11 +62,37 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
     }
   }, [isOpen]);
 
-  // Load user profile when token is present
+  // Load user profile & repos when token is present
+  const loadUserReposList = async (token, login) => {
+    setIsLoadingRepos(true);
+    try {
+      const repos = await fetchUserRepos(token);
+      setReposList(repos);
+      if (repos.length > 0) {
+        setGithubRepo((prev) => {
+          if (prev && repos.some((r) => r.toLowerCase() === prev.toLowerCase())) {
+            return prev;
+          }
+          const preferred =
+            repos.find((r) => r.toLowerCase().endsWith('/nuvio-catalogs')) ||
+            repos.find((r) => r.toLowerCase().endsWith('/mes-catalogues')) ||
+            repos.find((r) => r.toLowerCase().endsWith('/easycatalog')) ||
+            repos[0];
+          return preferred;
+        });
+      }
+    } catch (err) {
+      console.warn("Erreur chargement dépôts:", err);
+    } finally {
+      setIsLoadingRepos(false);
+    }
+  };
+
   useEffect(() => {
     const token = githubToken.trim();
     if (!token) {
       setUserProfile(null);
+      setReposList([]);
       return;
     }
 
@@ -68,24 +102,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
         const profile = await fetchUserProfile(token);
         if (!isMounted) return;
         setUserProfile(profile);
-
-        const defaultRepo = `${profile.login}/EasyCatalog`;
-        if (!githubRepo) {
-          setGithubRepo(defaultRepo);
-        }
-
-        // Verify or auto-create repo silently
-        const repos = await fetchUserRepos(token);
-        if (!isMounted) return;
-
-        const exists = repos.some((r) => r.toLowerCase() === defaultRepo.toLowerCase());
-        if (!exists) {
-          try {
-            await createDefaultRepo(token, 'EasyCatalog');
-          } catch (createErr) {
-            console.warn("Auto-create repo notice:", createErr);
-          }
-        }
+        await loadUserReposList(token, profile.login);
       } catch (err) {
         if (isMounted) {
           setUserProfile(null);
@@ -98,10 +115,43 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
     };
   }, [githubToken]);
 
+  const handleRefreshRepos = () => {
+    if (!githubToken || !userProfile) return;
+    loadUserReposList(githubToken.trim(), userProfile.login);
+    addToast("Liste des dépôts mise à jour.", "info");
+  };
+
+  const handleCreateNewRepo = async (e) => {
+    e?.preventDefault();
+    const cleanName = newRepoName.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '');
+    if (!cleanName) {
+      addToast("Veuillez saisir un nom de dépôt valide.", "error");
+      return;
+    }
+    const token = githubToken.trim();
+    if (!token || !userProfile) return;
+
+    setIsCreatingRepo(true);
+    try {
+      await createDefaultRepo(token, cleanName);
+      const fullRepo = `${userProfile.login}/${cleanName}`;
+      setReposList((prev) => [fullRepo, ...prev.filter((r) => r.toLowerCase() !== fullRepo.toLowerCase())]);
+      setGithubRepo(fullRepo);
+      setShowCreateRepo(false);
+      setNewRepoName('');
+      addToast(`🎉 Dépôt ${cleanName} créé et sélectionné !`, 'success');
+    } catch (err) {
+      addToast(err.message || "Erreur lors de la création du dépôt sur GitHub.", 'error');
+    } finally {
+      setIsCreatingRepo(false);
+    }
+  };
+
   const handleDisconnectGithub = () => {
     setGithubToken('');
     setGithubRepo('');
     setUserProfile(null);
+    setReposList([]);
     addToast("Compte GitHub déconnecté.", "info");
   };
 
@@ -198,12 +248,13 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
             </select>
           </div>
 
-          {/* 2. TMDB API Key */}
+          {/* 2. TMDB API Key (Optional) */}
           <div className="form-group">
             <div className="form-label">
               <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <Key size={15} color="var(--emerald)" />
                 {t('tmdbKeyLabel')}
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>(optionnel)</span>
               </span>
               <a
                 href="https://www.themoviedb.org/settings/api"
@@ -220,10 +271,12 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
               className="glass-input"
               value={tmdbKey}
               onChange={(e) => setTmdbKey(e.target.value)}
-              placeholder={t('tmdbKeyPlaceholder')}
+              placeholder="Clé par défaut active (ou renseignez votre propre clé)"
               autoComplete="off"
             />
-            <span className="form-help">{t('tmdbKeyHelp')}</span>
+            <span className="form-help">
+              Une clé publique par défaut est déjà active pour rechercher films et séries. Renseignez ce champ uniquement si vous souhaitez utiliser votre propre clé personnelle TMDB.
+            </span>
           </div>
 
           {/* 3. GITHUB 1-CLICK CONNECTION ONLY */}
@@ -264,34 +317,163 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
               )}
             </div>
 
-            {/* If user is connected: User card */}
+            {/* If user is connected: User card & Repo selector */}
             {userProfile ? (
-              <div style={{
-                background: 'rgba(16, 185, 129, 0.08)',
-                border: '1px solid rgba(16, 185, 129, 0.25)',
-                borderRadius: 'var(--radius-md)',
-                padding: '0.85rem 1rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.85rem'
-              }}>
-                <img
-                  src={userProfile.avatar_url}
-                  alt={userProfile.login}
-                  style={{ width: '42px', height: '42px', borderRadius: '50%', border: '2px solid var(--emerald)' }}
-                />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem' }}>
-                      {userProfile.name || userProfile.login}
-                    </span>
-                    <span style={{ color: 'var(--emerald)', fontSize: '0.82rem', fontWeight: 500 }}>
-                      @{userProfile.login}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                <div style={{
+                  background: 'rgba(16, 185, 129, 0.08)',
+                  border: '1px solid rgba(16, 185, 129, 0.25)',
+                  borderRadius: 'var(--radius-md)',
+                  padding: '0.75rem 1rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.85rem'
+                }}>
+                  <img
+                    src={userProfile.avatar_url}
+                    alt={userProfile.login}
+                    style={{ width: '40px', height: '40px', borderRadius: '50%', border: '2px solid var(--emerald)' }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <span style={{ fontWeight: 600, color: '#fff', fontSize: '0.95rem' }}>
+                        {userProfile.name || userProfile.login}
+                      </span>
+                      <span style={{ color: 'var(--emerald)', fontSize: '0.82rem', fontWeight: 500 }}>
+                        @{userProfile.login}
+                      </span>
+                    </div>
+                    <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
+                      Compte GitHub connecté
                     </span>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--emerald)', fontSize: '0.78rem', marginTop: '0.2rem' }}>
-                    <CheckCircle2 size={14} />
-                    <span>Dépôt <strong>{githubRepo || `${userProfile.login}/EasyCatalog`}</strong> prêt</span>
+                </div>
+
+                {/* Sélecteur et créateur de dépôt GitHub */}
+                <div style={{
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid rgba(255, 255, 255, 0.07)',
+                  borderRadius: 'var(--radius-md)',
+                  padding: '0.85rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.65rem'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#fff', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                      <GitBranch size={14} color="var(--emerald)" />
+                      Dépôt pour vos catalogues
+                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <button
+                        type="button"
+                        onClick={handleRefreshRepos}
+                        disabled={isLoadingRepos}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--text-muted)',
+                          fontSize: '0.72rem',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.2rem'
+                        }}
+                        title="Actualiser la liste des dépôts"
+                      >
+                        <RefreshCw size={11} className={isLoadingRepos ? 'spinner' : ''} />
+                        Actualiser
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowCreateRepo(prev => !prev)}
+                        style={{
+                          background: showCreateRepo ? 'rgba(239, 68, 68, 0.15)' : 'rgba(16, 185, 129, 0.15)',
+                          border: showCreateRepo ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)',
+                          color: showCreateRepo ? '#f87171' : 'var(--emerald)',
+                          borderRadius: '4px',
+                          padding: '0.15rem 0.45rem',
+                          fontSize: '0.72rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.25rem'
+                        }}
+                      >
+                        {showCreateRepo ? <X size={11} /> : <Plus size={11} />}
+                        {showCreateRepo ? 'Annuler' : 'Nouveau dépôt'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Formulaire de création d'un nouveau dépôt */}
+                  {showCreateRepo && (
+                    <div style={{
+                      background: 'rgba(0, 0, 0, 0.35)',
+                      border: '1px solid rgba(16, 185, 129, 0.3)',
+                      borderRadius: 'var(--radius-sm)',
+                      padding: '0.75rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.45rem'
+                    }}>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--emerald)', fontWeight: 600 }}>
+                        Créer un nouveau dépôt GitHub dédié :
+                      </div>
+                      <div style={{ display: 'flex', gap: '0.4rem' }}>
+                        <input
+                          type="text"
+                          className="glass-input"
+                          value={newRepoName}
+                          onChange={(e) => setNewRepoName(e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, ''))}
+                          placeholder="ex: nuvio-catalogs"
+                          style={{ fontSize: '0.8rem', padding: '0.35rem 0.6rem', flex: 1 }}
+                        />
+                        <button
+                          type="button"
+                          onClick={handleCreateNewRepo}
+                          disabled={isCreatingRepo || !newRepoName.trim()}
+                          className="btn btn-primary"
+                          style={{ minHeight: '32px', fontSize: '0.75rem', padding: '0.3rem 0.65rem', whiteSpace: 'nowrap' }}
+                        >
+                          {isCreatingRepo ? <Loader2 size={12} className="spinner" /> : <Check size={12} />}
+                          <span>Créer</span>
+                        </button>
+                      </div>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                        Le dépôt sera automatiquement créé en mode public sur votre GitHub et initialisé avec un README.
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Liste déroulante des dépôts existants */}
+                  <select
+                    className="glass-input"
+                    value={githubRepo}
+                    onChange={(e) => setGithubRepo(e.target.value)}
+                    style={{
+                      fontSize: '0.85rem',
+                      padding: '0.5rem 0.7rem',
+                      background: '#151921',
+                      color: '#fff',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {reposList.length === 0 ? (
+                      <option value={githubRepo}>{githubRepo || 'Aucun dépôt trouvé'}</option>
+                    ) : (
+                      reposList.map((r) => (
+                        <option key={r} value={r} style={{ background: '#151921', color: '#fff' }}>
+                          {r}
+                        </option>
+                      ))
+                    )}
+                  </select>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--emerald)', fontSize: '0.75rem' }}>
+                    <CheckCircle2 size={13} />
+                    <span>Dépôt actif : <strong>{githubRepo || 'Aucun'}</strong></span>
                   </div>
                 </div>
               </div>

@@ -44,29 +44,34 @@ export default function App() {
           addToast("Connexion à GitHub en cours...", "info");
           const token = await exchangeOAuthCode(code);
           const profile = await fetchUserProfile(token);
-          const defaultRepo = `${profile.login}/EasyCatalog`;
 
-          // Verify or auto-create repo
+          // Get existing repos
           const repos = await fetchUserRepos(token);
-          if (!repos.some((r) => r.toLowerCase() === defaultRepo.toLowerCase())) {
-            try {
-              await createDefaultRepo(token, 'EasyCatalog');
-            } catch (err) {
-              console.warn("Auto-create repo:", err);
-            }
+          let selectedRepo = localStorage.getItem('github_repo');
+
+          if (!selectedRepo || !repos.some((r) => r.toLowerCase() === selectedRepo.toLowerCase())) {
+            const preferred =
+              repos.find((r) => r.toLowerCase().endsWith('/nuvio-catalogs')) ||
+              repos.find((r) => r.toLowerCase().endsWith('/mes-catalogues')) ||
+              repos.find((r) => r.toLowerCase().endsWith('/easycatalog')) ||
+              repos[0] ||
+              `${profile.login}/nuvio-catalogs`;
+            selectedRepo = preferred;
           }
 
           localStorage.setItem('github_token', token);
-          localStorage.setItem('github_repo', defaultRepo);
+          localStorage.setItem('github_repo', selectedRepo);
           localStorage.setItem('gate_dismissed', 'true');
 
           setConfig((prev) => ({
             ...prev,
             githubToken: token,
-            githubRepo: defaultRepo
+            githubRepo: selectedRepo
           }));
           setHasDismissedGate(true);
           addToast(`🎉 Connecté avec succès ! Bienvenue @${profile.login}`, 'success');
+          // Open settings so the user can verify or choose their repository
+          setIsSettingsOpen(true);
         } catch (err) {
           addToast(err.message || "Erreur lors de la connexion GitHub.", 'error');
         }

@@ -1,7 +1,8 @@
 // TMDB API Service
 
 export async function searchTMDB(query, type = 'movie', apiKey, lang = 'fr') {
-  if (!query || !query.trim() || !apiKey) return [];
+  const effectiveKey = apiKey || import.meta.env.VITE_TMDB_API_KEY || '';
+  if (!query || !query.trim() || !effectiveKey) return [];
 
   const tmdbLang = lang === 'fr' ? 'fr-FR' : lang === 'es' ? 'es-ES' : lang === 'pt' ? 'pt-BR' : 'en-US';
   const cleanQuery = encodeURIComponent(query.trim());
@@ -13,8 +14,8 @@ export async function searchTMDB(query, type = 'movie', apiKey, lang = 'fr') {
   let allResults = [];
 
   for (const t of typesToSearch) {
-    const urlPage1 = `https://api.themoviedb.org/3/search/${t}?api_key=${apiKey}&query=${cleanQuery}&language=${tmdbLang}&page=1`;
-    const urlPage2 = `https://api.themoviedb.org/3/search/${t}?api_key=${apiKey}&query=${cleanQuery}&language=${tmdbLang}&page=2`;
+    const urlPage1 = `https://api.themoviedb.org/3/search/${t}?api_key=${effectiveKey}&query=${cleanQuery}&language=${tmdbLang}&page=1`;
+    const urlPage2 = `https://api.themoviedb.org/3/search/${t}?api_key=${effectiveKey}&query=${cleanQuery}&language=${tmdbLang}&page=2`;
 
     try {
       const [res1, res2] = await Promise.all([

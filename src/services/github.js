@@ -1,6 +1,7 @@
 // GitHub API Service
 
-export const PRIMARY_BASE_PATH = 'EasyCatalog/manifests';
+export const PRIMARY_BASE_PATH = 'manifests';
+const SUB_BASE_PATH = 'EasyCatalog/manifests';
 const LEGACY_BASE_PATH = 'tools/catalog-generator/manifests';
 
 export function parseRepoString(repoStr) {
@@ -283,23 +284,20 @@ async function fetchDirectoriesFromPath(owner, repo, token, basePath) {
 }
 
 export async function fetchExistingCollections(owner, repo, token) {
-  // 1. Try EasyCatalog/manifests first
+  // 1. Try standard root manifests/
   const primaryCollections = await fetchDirectoriesFromPath(owner, repo, token, PRIMARY_BASE_PATH);
   
-  // 2. Also check legacy path tools/catalog-generator/manifests if needed
+  // 2. Also check EasyCatalog/manifests
+  const subCollections = await fetchDirectoriesFromPath(owner, repo, token, SUB_BASE_PATH);
+
+  // 3. Also check legacy path tools/catalog-generator/manifests if needed
   const legacyCollections = await fetchDirectoriesFromPath(owner, repo, token, LEGACY_BASE_PATH);
   
   // Merge and deduplicate by folder name (primary takes precedence)
   const seen = new Set();
   const merged = [];
   
-  for (const col of primaryCollections) {
-    if (!seen.has(col.name)) {
-      seen.add(col.name);
-      merged.push(col);
-    }
-  }
-  for (const col of legacyCollections) {
+  for (const col of [...primaryCollections, ...subCollections, ...legacyCollections]) {
     if (!seen.has(col.name)) {
       seen.add(col.name);
       merged.push(col);

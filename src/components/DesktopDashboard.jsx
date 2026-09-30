@@ -310,6 +310,45 @@ export default function DesktopDashboard({
           </div>
         </div>
 
+        {/* Active Repository Indicator */}
+        {config?.githubRepo && (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            background: 'rgba(255, 255, 255, 0.04)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: 'var(--radius-sm)',
+            padding: '0.45rem 0.65rem',
+            fontSize: '0.78rem'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', minWidth: 0, overflow: 'hidden' }}>
+              <GitBranch size={13} color="var(--emerald)" style={{ flexShrink: 0 }} />
+              <span style={{ color: 'var(--text-muted)', flexShrink: 0 }}>Dépôt :</span>
+              <span style={{ color: '#fff', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={config.githubRepo}>
+                {config.githubRepo}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={onOpenSettings}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'var(--emerald)',
+                cursor: 'pointer',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                padding: '0.1rem 0.3rem',
+                flexShrink: 0
+              }}
+              title="Changer de dépôt GitHub"
+            >
+              Changer
+            </button>
+          </div>
+        )}
+
         {/* Bannière Tout ajouter à AIO (Lien universel AIO Metadata) */}
         <div style={{
           background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.12))',
