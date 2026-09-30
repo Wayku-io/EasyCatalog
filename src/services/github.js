@@ -23,7 +23,7 @@ export function loginWithGitHub() {
     throw new Error("L'identifiant OAuth GitHub (VITE_GITHUB_CLIENT_ID) n'est pas configuré.");
   }
   const redirectUri = window.location.origin + window.location.pathname;
-  const url = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(clientId)}&scope=repo&redirect_uri=${encodeURIComponent(redirectUri)}`;
+  const url = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(clientId)}&scope=repo&redirect_uri=${encodeURIComponent(redirectUri)}&prompt=select_account`;
   window.location.href = url;
 }
 
