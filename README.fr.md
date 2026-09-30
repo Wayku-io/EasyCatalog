@@ -31,17 +31,19 @@
 
 ---
 
-## 🌟 Qu'est-ce qu'EasyCatalog ?
+## 🌟 Pourquoi EasyCatalog ? La force des catalogues statiques
 
-**EasyCatalog** est un studio visuel conçu pour simplifier la création de catalogues de streaming personnalisés.
+S'il existe déjà d'excellentes solutions pour les **listes dynamiques** (tendances, populaires, automatisations par filtres), concevoir ses propres **collections statiques sur mesure** (sagas complètes, anthologies, filmographies d'un réalisateur, marathons thématiques) relevait jusqu'ici du parcours du combattant :
 
-Auparavant, concevoir des catalogues sur mesure pour **AIO Metadata** exigeait de rédiger manuellement des fichiers JSON complexes, de chercher les identifiants IMDb/TMDB un par un et de configurer soi-même un hébergement.
+- ❌ **Quotas très stricts** : Des plateformes comme **Trakt** ou **MDBList** imposent des limites sévères sur le nombre de listes personnelles créées.
+- ❌ **Fragiles et éphémères** : Utiliser des listes publiques tierces comporte le risque constant qu'elles soient modifiées, privatisées ou supprimées du jour au lendemain sans prévenir.
+- ❌ **Corvée technique** : Écrire à la main des manifestes JSON complexes, récupérer les IDs et configurer des serveurs d'hébergement est long et fastidieux.
 
-**EasyCatalog réunit tout ce processus dans une interface web intuitive en 1 clic :**
-- 🔍 **Recherchez** films et séries par titre, affiche et année de sortie.
-- 🎨 **Composez et organisez** vos listes avec des outils de tri par date, ordre alphabétique ou manuel.
-- 🚀 **Publiez en 1 clic** : les manifestes et fichiers de catalogues sont automatiquement enregistrés sur votre propre compte GitHub et mis en cache mondialement via CDN.
-- 🔗 **Ajoutez à AIO Metadata** : collez directement votre lien de manifeste dans **AIO Metadata**.
+**EasyCatalog change complètement la donne :**
+- ♾️ **Totalement illimité** : Créez autant de catalogues statiques personnalisés que vous le souhaitez, sans aucune restriction ni abonnement.
+- 🛡️ **Propriété totale et permanente (À vie)** : Vos catalogues sont stockés directement sur **votre propre dépôt GitHub**. Personne d'autre ne peut les modifier ou les supprimer. Ils vous appartiennent à vie.
+- ⚡ **Studio visuel intuitif** : Recherchez par titre, affiche et année, ajustez l'ordre en 1 clic et publiez instantanément.
+- 🔗 **Conçu pour AIO Metadata** : Collez directement vos liens de manifestes dans **AIO Metadata**.
 
 👉 **Accéder au service :** [https://easycatalog.vercel.app/](https://easycatalog.vercel.app/)
 
@@ -51,6 +53,7 @@ Auparavant, concevoir des catalogues sur mesure pour **AIO Metadata** exigeait d
 
 | Fonctionnalité | Description |
 | :--- | :--- |
+| **♾️ Illimité & Permanent** | Aucune restriction de nombre contrairement à Trakt ou MDBList. Vos catalogues restent à vie sur votre GitHub. |
 | **🔍 Recherche TMDB en direct** | Recherche instantanée de films et séries par titre, affiche et année de sortie. Prêt à l'emploi sans rien configurer ! |
 | **🐙 Connexion GitHub en 1 clic** | Authentification officielle et sécurisée par OAuth sans manipulation de jetons ni de clés compliquées. |
 | **📁 Choix du dépôt de stockage** | Sélectionnez n'importe lequel de vos dépôts GitHub existants ou créez un dépôt dédié (ex: `nuvio-catalogs`) en un clic. |

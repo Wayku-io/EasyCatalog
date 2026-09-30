@@ -31,17 +31,19 @@
 
 ---
 
-## 🌟 What is EasyCatalog?
+## 🌟 Why EasyCatalog? The Power of Static Catalogs
 
-**EasyCatalog** is a free visual studio designed to make creating custom streaming catalogs effortless. 
+While excellent solutions already exist for **dynamic lists** (trending, popular, automated filters), creating your own **curated static collections** (franchises, director filmographies, thematic marathons, personal favorites) has always been frustrating:
 
-Previously, creating custom catalogs for **AIO Metadata** required writing complex JSON files by hand, finding IMDb/TMDB IDs individually, and hosting files on servers.
+- ❌ **Strict Limits**: Platforms like **Trakt** or **MDBList** impose heavy quota restrictions on the number of personal lists you can create.
+- ❌ **Fragile & Ephemeral**: Relying on third-party public lists is risky—creators can alter, privatize, or delete them overnight without warning.
+- ❌ **Technical Barrier**: Writing raw JSON manifests by hand, resolving IDs, and configuring server hosting is tedious.
 
-**EasyCatalog automates the entire process into a clean 1-click web interface:**
-- 🔍 **Search** movies and TV series by title, poster, and release year.
-- 🎨 **Build & Organize** your custom lists with sorting and reordering tools.
-- 🚀 **Publish in 1 Click**: Manifests and catalogs are generated directly on your own GitHub account and served via ultra-fast global CDN caching.
-- 🔗 **Add to AIO Metadata**: Copy your generated manifest link directly into **AIO Metadata**.
+**EasyCatalog solves this by putting you in total control:**
+- ♾️ **Truly Unlimited**: Build as many custom static catalogs as you want, with zero artificial caps or subscriptions.
+- 🛡️ **100% Owned & Permanent (A vie)**: Every catalog is stored directly on **your own GitHub repository**. No third-party can take them down or alter them. They belong to you forever.
+- ⚡ **Effortless Visual Studio**: Search by title, poster, and release year, arrange orders with 1-click sorting, and publish instantly.
+- 🔗 **Built for AIO Metadata**: Copy your generated manifest link directly into **AIO Metadata**.
 
 👉 **Launch EasyCatalog now:** [https://easycatalog.vercel.app/](https://easycatalog.vercel.app/)
 
@@ -51,6 +53,7 @@ Previously, creating custom catalogs for **AIO Metadata** required writing compl
 
 | Feature | Description |
 | :--- | :--- |
+| **♾️ Unlimited & Permanent** | No list limits unlike Trakt or MDBList. Your catalogs live permanently on your personal GitHub repo. |
 | **🔍 Live TMDB Search** | Search movies and series by title, poster, and release year. Ready to use with zero setup! |
 | **🐙 1-Click GitHub Connect** | Connect your GitHub account securely via official OAuth without manual tokens or complex setup. |
 | **📁 Dedicated Storage Choice** | Select any of your existing GitHub repositories or create a dedicated one (e.g. `nuvio-catalogs`) in 1 click. |
