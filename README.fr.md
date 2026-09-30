@@ -3,178 +3,110 @@
   <h1>🎬 EasyCatalog</h1>
 
   <p>
-    <strong>Le générateur moderne de catalogues de streaming pour AIO Metadata, Stremio et Nuvio.</strong>
+    <strong>Le créateur moderne de catalogues de streaming pour AIOStreams, Nuvio et Stremio.</strong>
   </p>
 
   <p>
-    Créez, gérez et hébergez vos catalogues de films et séries personnalisés en quelques clics,<br />
-    propulsés par <strong>TMDB</strong> et distribués mondialement à haute vitesse via <strong>GitHub</strong> et le CDN <strong>jsDelivr</strong>.
+    Créez, organisez et hébergez vos propres catalogues de films et séries en quelques secondes.<br />
+    Alimenté par <strong>TMDB</strong> et diffusé dans le monde entier à vitesse maximale via <strong>jsDelivr CDN</strong>.
   </p>
 
   <p>
-    <a href="https://github.com/Wayku-io/EasyCatalog/stargazers"><img src="https://img.shields.io/github/stars/Wayku-io/EasyCatalog?style=for-the-badge&color=10b981" alt="Stars" /></a>
-    <a href="https://github.com/Wayku-io/EasyCatalog/network/members"><img src="https://img.shields.io/github/forks/Wayku-io/EasyCatalog?style=for-the-badge&color=10b981" alt="Forks" /></a>
-    <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react&logoColor=black" alt="React 19" /></a>
-    <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" /></a>
-    <a href="https://vercel.com/"><img src="https://img.shields.io/badge/Vercel-Serverless-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" /></a>
-    <a href="https://buymeacoffee.com/wayku"><img src="https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Wayku-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee" /></a>
+    <a href="https://easycatalog.vercel.app/">
+      <img src="https://img.shields.io/badge/🚀_Ouvrir_l'application-easycatalog.vercel.app-10b981?style=for-the-badge" alt="Ouvrir EasyCatalog" />
+    </a>
+  </p>
+
+  <p>
+    <a href="https://github.com/Wayku-io/EasyCatalog/stargazers"><img src="https://img.shields.io/github/stars/Wayku-io/EasyCatalog?style=flat-square&color=10b981" alt="Stars" /></a>
+    <a href="https://github.com/Wayku-io/EasyCatalog/network/members"><img src="https://img.shields.io/github/forks/Wayku-io/EasyCatalog?style=flat-square&color=10b981" alt="Forks" /></a>
+    <a href="https://buymeacoffee.com/wayku"><img src="https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Wayku-FFDD00?style=flat-square&logo=buy-me-a-coffee&logoColor=black" alt="Offrir un café" /></a>
+  </p>
+
+  <p>
+    <sub><a href="README.md">🇬🇧 Read this page in English</a></sub>
   </p>
 
 </div>
 
 ---
 
-## 🌟 Pourquoi EasyCatalog ?
+## 🌟 Qu'est-ce qu'EasyCatalog ?
 
-Avant EasyCatalog, créer des catalogues personnalisés pour **AIO Metadata** (AIOStreams), **Stremio** ou **Nuvio** nécessitait d'écrire des fichiers JSON à la main, de chercher manuellement les identifiants IMDb/TMDB, et de configurer des serveurs ou des hébergements complexes.
+**EasyCatalog** est un studio visuel conçu pour simplifier la création de catalogues de streaming personnalisés.
 
-**EasyCatalog transforme ce processus en une expérience visuelle fluide et intuitive :**
-- 🔍 Recherchez n'importe quel film ou série sur **TMDB**.
-- ➕ Ajoutez-le à votre catalogue d'un simple clic.
-- ⚡ Cliquez sur **Publier** : vos fichiers sont instantanément générés, versionnés sur GitHub et immédiatement disponibles via le CDN mondial jsDelivr.
-- 🔗 Importez directement le manifeste dans **AIO Metadata** ou **Stremio**.
+Auparavant, concevoir des catalogues sur mesure pour **AIO Metadata (AIOStreams)**, **Nuvio** ou **Stremio** exigeait de rédiger manuellement des fichiers JSON complexes, de chercher les identifiants IMDb/TMDB un par un et de configurer soi-même un hébergement.
+
+**EasyCatalog réunit tout ce processus dans une interface web intuitive en 1 clic :**
+- 🔍 **Recherchez** n'importe quel film ou série avec affiches HD et métadonnées en direct.
+- 🎨 **Composez et organisez** vos listes avec des outils de tri par date, ordre alphabétique ou manuel.
+- 🚀 **Publiez en 1 clic** : les manifestes et fichiers de catalogues sont automatiquement enregistrés sur votre propre compte GitHub et mis en cache mondialement via CDN.
+- 🔗 **Ajoutez à votre lecteur** : collez simplement votre lien de manifeste dans AIOStreams, Nuvio ou Stremio.
+
+👉 **Accéder au service :** [https://easycatalog.vercel.app/](https://easycatalog.vercel.app/)
 
 ---
 
-## ✨ Fonctionnalités Principales
+## ✨ Fonctionnalités principales
 
 | Fonctionnalité | Description |
 | :--- | :--- |
-| **🔍 Recherche TMDB en direct** | Recherche instantanée multi-langue de films et séries avec affiches haute résolution, notes, années de sortie et résumés. |
-| **🐙 Connexion GitHub en 1 Clic** | Authentification officielle OAuth GitHub sans mot de passe : votre compte et votre dépôt de stockage sont configurés automatiquement. |
-| **🎛️ Studio Dashboard PC (3 Panneaux)** | Interface de travail fixe sans scroll externe : **Mes Catalogues** à gauche, **Recherche TMDB** au centre, **Éditeur en direct** à droite. |
-| **📱 Expérience Mobile Native** | Conçu pour une ergonomie parfaite sur smartphone (iOS / Android) avec menu fluide et bascule instantanée entre recherche et éditeur. |
-| **📦 Super Manifeste ("Tout ajouter à AIO")** | Compilez tous vos catalogues en un seul clic dans un manifeste unifié pour installer l'intégralité de vos collections en une seule fois dans Stremio. |
-| **🚀 Hébergement CDN jsDelivr** | Aucun serveur payant nécessaire : vos manifestes et catalogues sont servis mondialement avec mise en cache CDN ultra-rapide. |
-| **🌍 Multi-langues** | Interface et métadonnées TMDB disponibles en 🇫🇷 Français, 🇬🇧 Anglais, 🇪🇸 Espagnol et 🇵🇹 Portugais. |
-| **🔒 Séparation Stricte Films / Séries** | Verrouillage automatique du type de média pour garantir des manifestes 100 % conformes aux spécifications de l'API Stremio. |
+| **🔍 Recherche TMDB en direct** | Accès immédiat à des millions de films et séries avec affiches, années de sortie et résumés. Prêt à l'emploi sans rien configurer ! |
+| **🐙 Connexion GitHub en 1 clic** | Authentification officielle et sécurisée par OAuth sans manipulation de jetons ni de clés compliquées. |
+| **📁 Choix du dépôt de stockage** | Sélectionnez n'importe lequel de vos dépôts GitHub existants ou créez un dépôt dédié (ex: `nuvio-catalogs`) en un clic. |
+| **🎛️ Studio Bureau (3 Colonnes)** | Interface pensée pour le confort : **Mes Catalogues** (gauche), **Recherche TMDB** (centre), **Éditeur en direct** (droite). |
+| **📱 Interface Mobile Complète** | Navigation fluide et adaptée sur smartphones (iOS et Android) avec étapes guidées. |
+| **📦 Pack Complet ("Super Manifest")** | Regroupez tous vos catalogues personnels sous une seule URL pour tout importer d'un coup dans AIOStreams. |
+| **⚡ CDN Mondial Gratuit** | Vos manifestes sont servis instantanément à travers le monde par le réseau de diffusion jsDelivr. |
+| **🌍 Interface multilingue** | Disponible en 🇫🇷 Français, 🇬🇧 Anglais, 🇪🇸 Espagnol et 🇵🇹 Portugais. |
+| **🔒 Respect des normes Stremio** | Verrouillage automatique films / séries pour garantir une conformité totale avec le standard des addons Stremio. |
 
 ---
 
-## 🔄 Comment ça fonctionne ? (Architecture)
+## 📖 Comment l'utiliser ?
+
+### 1. Se connecter avec GitHub
+Ouvrez [easycatalog.vercel.app](https://easycatalog.vercel.app/) et cliquez sur **Se connecter avec GitHub**. Validez l'accès une seule fois. Dans les paramètres (⚙️), vous pouvez choisir un dépôt existant ou créer un nouveau dépôt dédié (par exemple `nuvio-catalogs`).
+
+### 2. Composer votre catalogue
+- Choisissez le mode **Films** ou **Séries**.
+- Recherchez les œuvres qui vous intéressent et cliquez dessus pour les ajouter à votre liste.
+- Réorganisez les éléments comme vous le souhaitez grâce au menu de tri (par année, alphabétique A-Z ou manuel).
+- Donnez un nom clair à votre collection (ex: *L'univers Star Wars*, *Films Cultes Années 90*).
+
+### 3. Publier et récupérer votre lien
+- Cliquez sur **Publier**.
+- Votre catalogue et son manifeste JSON sont immédiatement créés et enregistrés sur votre dépôt GitHub.
+- Cliquez sur l'icône de copie pour récupérer l'URL de votre manifeste et collez-la dans **AIOStreams** ou **Nuvio**.
+
+---
+
+## 🔄 Fonctionnement technique
 
 ```mermaid
 graph LR
-    User([Utilisateur]) -->|1. Recherche & Sélection| App[EasyCatalog Studio]
-    TMDB[(API TMDB)] -->|Métadonnées & Posters| App
-    App -->|2. Publication automatique| GitHub[(Dépôt GitHub de l'utilisateur)]
-    GitHub -->|3. Distribution CDN| jsDelivr[CDN Mondial jsDelivr]
-    jsDelivr -->|4. URL Manifeste JSON| Stremio[Stremio / Nuvio / AIOStreams]
+    User([Utilisateur]) -->|1. Recherche & Composition| App[Application Web EasyCatalog]
+    TMDB[(Base TMDB)] -->|Métadonnées & Affiches| App
+    App -->|2. Publication 1 Clic| GitHub[(Votre Dépôt GitHub)]
+    GitHub -->|3. Cache CDN Global| jsDelivr[CDN jsDelivr]
+    jsDelivr -->|4. Lien de Manifeste| Player[AIOStreams / Nuvio / Stremio]
 ```
 
-1. **Recherche** : L'application interroge l'API TMDB pour extraire les métadonnées officielles (titres, posters, résumés, identifiants).
-2. **Assemblage** : Vous ordonnez et personnalisez votre collection dans l'éditeur interactif.
-3. **Publication** : EasyCatalog crée l'arborescence complète `EasyCatalog/manifests/<votre-catalogue>/` sur votre dépôt GitHub via l'API REST de GitHub.
-4. **Diffusion** : Le catalogue est servi instantanément via le réseau CDN gratuit jsDelivr (`https://cdn.jsdelivr.net/gh/<user>/<repo>/...`).
-5. **Streaming** : Vous collez l'URL générée dans Stremio, Nuvio ou AIO Metadata !
+- **Propriété totale de vos données** : Vos catalogues vous appartiennent et sont stockés sur votre propre compte GitHub.
+- **Disponibilité maximale** : Grâce à GitHub et jsDelivr, vos catalogues sont accessibles en permanence sans interruption de service.
+- **Sécurité et vie privée** : L'authentification passe par le protocole sécurisé OAuth GitHub. Aucun mot de passe ni token n'est stocké sur des serveurs externes.
 
 ---
 
-## 🚀 Déploiement en 1 Clic sur Vercel (Recommandé)
+## ☕ Soutenir le projet
 
-EasyCatalog est optimisé pour être hébergé **gratuitement** sur **Vercel** avec l'offre Hobby.
+EasyCatalog est un projet indépendant et gratuit. Si le service vous est utile, vous pouvez soutenir son maintien et ses évolutions :
 
-### 1. Importer sur Vercel
-1. Rendez-vous sur [vercel.com/new](https://vercel.com/new).
-2. Sélectionnez le dépôt `Wayku-io/EasyCatalog` et cliquez sur **Import**.
-3. Cliquez sur **Deploy**. En 30 secondes, votre site est en ligne avec une URL publique `https://votre-app.vercel.app`.
-
-### 2. Activer la connexion officielle GitHub OAuth
-1. Allez sur les paramètres GitHub : [github.com/settings/applications/new](https://github.com/settings/applications/new).
-2. Remplissez :
-   - **Application name** : `EasyCatalog`
-   - **Homepage URL** : `https://votre-app.vercel.app`
-   - **Authorization callback URL** : `https://votre-app.vercel.app/` *(avec le slash final)*
-3. Cliquez sur **Register application**.
-4. Copiez votre **Client ID** et générez votre **Client Secret**.
-5. Dans Vercel, allez dans **Settings** > **Environment Variables** et ajoutez :
-   - `VITE_GITHUB_CLIENT_ID` = `votre_client_id`
-   - `GITHUB_CLIENT_SECRET` = `votre_client_secret`
-6. Redéployez votre projet sur Vercel : **votre bouton de connexion en 1 clic est actif !**
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Wayku-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/wayku)
 
 ---
 
-## 💻 Développement Local
+## 📄 Licence et mentions
 
-Si vous souhaitez exécuter EasyCatalog en local sur votre machine :
-
-```bash
-# 1. Cloner le dépôt
-git clone https://github.com/Wayku-io/EasyCatalog.git
-cd EasyCatalog
-
-# 2. Installer les dépendances
-npm install
-
-# 3. (Optionnel) Configurer les variables d'environnement
-cp .env.example .env
-# Remplissez VITE_GITHUB_CLIENT_ID et GITHUB_CLIENT_SECRET pour tester l'OAuth en local
-
-# 4. Démarrer le serveur de développement
-npm run dev
-```
-
-L'application sera accessible sur `http://localhost:5173`.
-
----
-
-## 📁 Structure du Projet
-
-```text
-EasyCatalog/
-├── api/
-│   └── auth.js             # Fonction Serverless Vercel (échange de token OAuth GitHub)
-├── public/
-│   ├── favicon.svg         # Favicon émeraude officiel
-│   └── icons.svg           # Sprites et icônes
-├── src/
-│   ├── assets/             # Images et icônes statiques
-│   ├── components/
-│   │   ├── DesktopDashboard.jsx   # Studio 3 colonnes pour PC
-│   │   ├── HubScreen.jsx          # Écran d'accueil mobile
-│   │   ├── SearchScreen.jsx       # Écran de recherche mobile
-│   │   ├── BuilderScreen.jsx      # Éditeur de catalogue mobile
-│   │   ├── CollectionsScreen.jsx  # Gestionnaire de collections mobile
-│   │   ├── ConfigModal.jsx        # Fenêtre de configuration & Connexion GitHub
-│   │   ├── Header.jsx             # En-tête avec switch de langue & statut
-│   │   └── Toast.jsx              # Système de notifications toast
-│   ├── i18n/
-│   │   ├── LanguageContext.jsx    # Gestionnaire de contexte de langue
-│   │   └── translations.js        # Dictionnaires FR, EN, ES, PT
-│   ├── services/
-│   │   ├── github.js              # API GitHub (OAuth, commits, manifests, jsDelivr)
-│   │   ├── tmdb.js                # API TheMovieDatabase (recherche, détails)
-│   │   └── export.js              # Export JSON pour Stremio
-│   ├── App.jsx                    # Point d'entrée principal & routage
-│   ├── index.css                  # Thème Design Système (Vert Émeraude, Glassmorphism)
-│   └── main.jsx                   # Montage React 19
-├── vercel.json                    # Configuration de routage Vercel SPA + API
-├── vite.config.js                 # Configuration Vite avec middleware dev OAuth
-└── README.md                      # Documentation du projet
-```
-
----
-
-## ☕ Soutenir le Projet
-
-Si vous appréciez EasyCatalog et souhaitez soutenir son développement continu :
-
-<div align="center">
-  <a href="https://buymeacoffee.com/wayku">
-    <img src="https://img.buymeacoffee.com/button-api/?text=Offrir un café à Wayku&emoji=☕&slug=wayku&button_colour=10b981&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00" alt="Offrir un café" />
-  </a>
-</div>
-
----
-
-## ⚖️ Mentions Légales & Confidentialité
-
-- Consultez notre document complet [LEGAL.md](LEGAL.md) détaillant l'hébergement Vercel, la conformité RGPD (zéro traceur, 100 % local), les attributions obligatoires TMDB et la clause de non-responsabilité (aucun fichier vidéo ni flux hébergé).
-
----
-
-## 📄 Licence
-
-Ce projet est sous licence MIT — vous êtes libre de l'utiliser, le modifier et le distribuer.
-Consultez le fichier `LICENSE` pour plus de détails.
-
+Ce projet est sous licence [MIT](LICENSE).  
+Cette application est un outil communautaire indépendant et n'est pas affiliée officiellement à Stremio, Nuvio, AIOStreams ou TMDB.
