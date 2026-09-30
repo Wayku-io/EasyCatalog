@@ -319,6 +319,7 @@ export default function App() {
                 resultData={resultData}
                 onReset={handleResetBuilder}
                 onBackToHub={() => setCurrentScreen('hub')}
+                editingCollectionPath={editingCollectionPath}
               />
             )}
           </>

@@ -37,13 +37,13 @@ export default function LegalModal({ isOpen, onClose }) {
               <Scale size={20} />
             </div>
             <div>
-              <h2 className="modal-title" style={{ fontSize: '1.15rem' }}>Mentions Légales & Confidentialité</h2>
+              <h2 className="modal-title" style={{ fontSize: '1.15rem' }}>{t('legalModalTitle')}</h2>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', margin: 0 }}>
-                Conformité RGPD, Propriété Intellectuelle & Conditions d'utilisation
+                {t('legalModalSub')}
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="close-btn" aria-label="Fermer">
+          <button onClick={onClose} className="close-btn" aria-label={t('close')}>
             <X size={20} />
           </button>
         </div>
@@ -77,7 +77,7 @@ export default function LegalModal({ isOpen, onClose }) {
             }}
           >
             <Scale size={13} />
-            <span>Mentions Légales</span>
+            <span>{t('tabLegal')}</span>
           </button>
 
           <button
@@ -100,7 +100,7 @@ export default function LegalModal({ isOpen, onClose }) {
             }}
           >
             <Lock size={13} />
-            <span>Confidentialité & RGPD</span>
+            <span>{t('tabPrivacy')}</span>
           </button>
 
           <button
@@ -123,7 +123,7 @@ export default function LegalModal({ isOpen, onClose }) {
             }}
           >
             <AlertTriangle size={13} />
-            <span>Avertissement & TMDB</span>
+            <span>{t('tabDisclaimer')}</span>
           </button>
         </div>
 

@@ -268,10 +268,10 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                 <CheckCircle2 size={18} color="var(--emerald)" style={{ flexShrink: 0 }} />
                 <div>
                   <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#fff' }}>
-                    Recherche TMDB active
+                    {t('tmdbActiveGlobal')}
                   </div>
                   <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
-                    Clé fournie par le site pour tous vos visiteurs
+                    {t('tmdbActiveGlobalSub')}
                   </div>
                 </div>
               </div>
@@ -293,7 +293,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                 onMouseEnter={(e) => (e.currentTarget.style.color = '#fff')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-secondary)')}
               >
-                Utiliser ma propre clé
+                {t('useCustomKey')}
               </button>
             </div>
           ) : (
@@ -321,7 +321,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                         padding: 0
                       }}
                     >
-                      Revenir à la clé par défaut
+                      {t('resetDefaultKey')}
                     </button>
                   )}
                   <a
@@ -340,13 +340,13 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                 className="glass-input"
                 value={tmdbKey}
                 onChange={(e) => setTmdbKey(e.target.value)}
-                placeholder="Collez votre clé API v3 personnelle..."
+                placeholder={t('customKeyPlaceholder')}
                 autoComplete="off"
               />
               <span className="form-help">
                 {hasGlobalTmdb
-                  ? "Votre clé personnelle prendra la priorité sur la clé globale fournie par le site."
-                  : "Renseignez votre clé pour rechercher films et séries en direct."}
+                  ? t('customKeyHelp')
+                  : t('tmdbKeyHelp')}
               </span>
             </div>
           )}
@@ -364,7 +364,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <span style={{ fontWeight: 600, fontSize: '0.92rem', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
                 <GitBranch size={16} color="var(--emerald)" />
-                Hébergement GitHub
+                {t('githubHosting')}
               </span>
               {userProfile && (
                 <button
@@ -381,10 +381,10 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                     gap: '0.3rem',
                     padding: '0.2rem 0.4rem'
                   }}
-                  title="Déconnecter le compte GitHub"
+                  title={t('disconnectGithubTitle')}
                 >
                   <LogOut size={12} />
-                  Déconnecter
+                  {t('disconnect')}
                 </button>
               )}
             </div>
@@ -416,7 +416,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                       </span>
                     </div>
                     <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-                      Compte GitHub connecté
+                      {t('githubConnected')}
                     </span>
                   </div>
                 </div>
@@ -434,7 +434,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#fff', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                       <GitBranch size={14} color="var(--emerald)" />
-                      Dépôt pour vos catalogues
+                      {t('repoForCatalogs')}
                     </span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                       <button
@@ -451,10 +451,10 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                           alignItems: 'center',
                           gap: '0.2rem'
                         }}
-                        title="Actualiser la liste des dépôts"
+                        title={t('refreshRepos')}
                       >
                         <RefreshCw size={11} className={isLoadingRepos ? 'spinner' : ''} />
-                        Actualiser
+                        {t('refreshRepos')}
                       </button>
                       <button
                         type="button"
@@ -474,7 +474,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                         }}
                       >
                         {showCreateRepo ? <X size={11} /> : <Plus size={11} />}
-                        {showCreateRepo ? 'Annuler' : 'Nouveau dépôt'}
+                        {showCreateRepo ? t('cancel') : t('newRepo')}
                       </button>
                     </div>
                   </div>
@@ -491,7 +491,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                       gap: '0.45rem'
                     }}>
                       <div style={{ fontSize: '0.75rem', color: 'var(--emerald)', fontWeight: 600 }}>
-                        Créer un nouveau dépôt GitHub dédié :
+                        {t('createDedicatedRepo')}
                       </div>
                       <div style={{ display: 'flex', gap: '0.4rem' }}>
                         <input
@@ -510,7 +510,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                           style={{ minHeight: '32px', fontSize: '0.75rem', padding: '0.3rem 0.65rem', whiteSpace: 'nowrap' }}
                         >
                           {isCreatingRepo ? <Loader2 size={12} className="spinner" /> : <Check size={12} />}
-                          <span>Créer</span>
+                          <span>{t('createBtn')}</span>
                         </button>
                       </div>
                       <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
@@ -533,7 +533,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                     }}
                   >
                     {reposList.length === 0 ? (
-                      <option value={githubRepo}>{githubRepo || 'Aucun dépôt trouvé'}</option>
+                      <option value={githubRepo}>{githubRepo || t('noReposFound')}</option>
                     ) : (
                       reposList.map((r) => (
                         <option key={r} value={r} style={{ background: '#151921', color: '#fff' }}>
@@ -545,7 +545,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--emerald)', fontSize: '0.75rem' }}>
                     <CheckCircle2 size={13} />
-                    <span>Dépôt actif : <strong>{githubRepo || 'Aucun'}</strong></span>
+                    <span>{t('activeRepo')} <strong>{githubRepo || t('none')}</strong></span>
                   </div>
                 </div>
               </div>
@@ -553,7 +553,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
               /* If NOT connected: The single 1-Click GitHub button */
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.82rem', lineHeight: 1.45, margin: 0 }}>
-                  Connectez votre compte GitHub en 1 clic pour héberger et synchroniser automatiquement vos catalogues de streaming.
+                  {t('connectGithubDesc')}
                 </p>
 
                 <button
@@ -588,7 +588,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                   <svg height="20" width="20" viewBox="0 0 16 16" fill="currentColor">
                     <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
                   </svg>
-                  <span>Se connecter avec GitHub (1 Clic)</span>
+                  <span>{t('connectGithubOneClick')}</span>
                 </button>
               </div>
             )}
@@ -603,7 +603,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
             style={{ width: '100%', minHeight: '40px', fontSize: '0.85rem' }}
           >
             <Coffee size={16} />
-            <span>Soutenir le projet (Offrir un café)</span>
+            <span>{t('supportCoffee')}</span>
           </a>
 
           {/* Action buttons */}
@@ -659,7 +659,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
               }}
             >
               <Scale size={12} />
-              <span>Mentions Légales, Confidentialité & Décharge TMDB</span>
+              <span>{t('legalNoticeFooter')}</span>
             </button>
           </div>
         </form>

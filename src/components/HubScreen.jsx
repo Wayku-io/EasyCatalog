@@ -92,7 +92,7 @@ export default function HubScreen({ onCreateNew, onOpenCollections, currentRepo,
             textDecoration: 'underline'
           }}
         >
-          Mentions Légales, Confidentialité & Décharge TMDB
+          {t('legalNoticeFooter')}
         </button>
       </div>
     </div>

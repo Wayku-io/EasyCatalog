@@ -45,7 +45,7 @@ export default function DesktopDashboard({
   isPublishing,
   handlePublish,
   handleResetBuilder,
-  _editingCollectionPath,
+  editingCollectionPath,
   setEditingCollectionPath,
   onOpenSettings,
   onOpenLegal
@@ -152,7 +152,7 @@ export default function DesktopDashboard({
         jsDelivrUrl: data.jsDelivrUrl,
         stremioUrl: data.stremioUrl
       });
-      addToast(`Catalogue "${col.displayName}" chargé dans l'éditeur`, 'success');
+      addToast(`"${col.displayName}" ${t('colLoadedToast')}`, 'success');
     } catch (err) {
       addToast(err.message, 'error');
     } finally {
@@ -297,7 +297,7 @@ export default function DesktopDashboard({
               onClick={loadCollectionsList}
               className="btn btn-secondary"
               style={{ minHeight: '32px', width: '32px', padding: 0 }}
-              title="Rafraîchir"
+              title={t('refreshTitle')}
             >
               <RefreshCw size={13} className={loadingCollections ? 'spinner' : ''} />
             </button>
@@ -305,10 +305,10 @@ export default function DesktopDashboard({
               onClick={handleResetBuilder}
               className="btn btn-primary"
               style={{ minHeight: '32px', padding: '0.25rem 0.65rem', fontSize: '0.8rem' }}
-              title="Créer un nouveau catalogue vide"
+              title={t('newCollectionTitle')}
             >
               <Plus size={14} />
-              <span>Nouveau</span>
+              <span>{t('newCatalogShort')}</span>
             </button>
           </div>
         </div>
@@ -327,7 +327,7 @@ export default function DesktopDashboard({
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', minWidth: 0, overflow: 'hidden' }}>
               <GitBranch size={13} color="var(--emerald)" style={{ flexShrink: 0 }} />
-              <span style={{ color: 'var(--text-muted)', flexShrink: 0 }}>Dépôt :</span>
+              <span style={{ color: 'var(--text-muted)', flexShrink: 0 }}>{t('repoLabel')}</span>
               <span style={{ color: '#fff', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={config.githubRepo}>
                 {config.githubRepo}
               </span>
@@ -345,9 +345,9 @@ export default function DesktopDashboard({
                 padding: '0.1rem 0.3rem',
                 flexShrink: 0
               }}
-              title="Changer de dépôt GitHub"
+              title={t('settings')}
             >
-              Changer
+              {t('changeRepoBtn')}
             </button>
           </div>
         )}
@@ -417,17 +417,17 @@ export default function DesktopDashboard({
           {!config?.githubRepo ? (
             <div style={{ textAlign: 'center', padding: '2rem 1rem', color: 'var(--text-muted)', fontSize: '0.825rem' }}>
               <GitBranch size={28} style={{ opacity: 0.4, margin: '0 auto 0.5rem' }} />
-              <p>Configurez votre dépôt GitHub dans les Paramètres ⚙️ pour charger vos catalogues.</p>
+              <p>{t('configureRepoNotice')}</p>
             </div>
           ) : loadingCollections ? (
             <div style={{ textAlign: 'center', padding: '2rem 1rem', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
               <Loader2 size={24} className="spinner" style={{ margin: '0 auto 0.5rem' }} />
-              <p>Chargement de vos catalogues...</p>
+              <p>{t('collectionsLoading')}</p>
             </div>
           ) : collections.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '2rem 1rem', color: 'var(--text-muted)', fontSize: '0.825rem' }}>
-              <p>Aucun catalogue trouvé sur votre dépôt.</p>
-              <p style={{ marginTop: '0.4rem', fontSize: '0.75rem' }}>Créez votre première collection à droite !</p>
+              <p>{t('noRepoFoundNotice')}</p>
+              <p style={{ marginTop: '0.4rem', fontSize: '0.75rem' }}>{t('createFirstColNotice')}</p>
             </div>
           ) : (
             collections.map(col => (
@@ -459,15 +459,15 @@ export default function DesktopDashboard({
                     onClick={() => handleOpenCollection(col)}
                     className="btn btn-secondary"
                     style={{ minHeight: '30px', padding: '0.2rem 0.5rem', fontSize: '0.75rem' }}
-                    title="Charger dans l'éditeur"
+                    title={t('openInEditor')}
                   >
-                    {loadingColPath === col.path ? <Loader2 size={12} className="spinner" /> : "Éditer"}
+                    {loadingColPath === col.path ? <Loader2 size={12} className="spinner" /> : t('editBtn')}
                   </button>
                   <button
                     onClick={(e) => handleCopyColUrl(col, e)}
                     className="btn btn-secondary"
                     style={{ minHeight: '30px', width: '30px', padding: 0 }}
-                    title="Copier le lien AIO"
+                    title={t('copyDirectLink')}
                   >
                     {copiedColPath === col.path ? <Check size={13} color="var(--emerald)" /> : <Copy size={13} />}
                   </button>
@@ -475,7 +475,7 @@ export default function DesktopDashboard({
                     onClick={(e) => handleDeleteCollection(col, e)}
                     className="btn btn-danger"
                     style={{ minHeight: '30px', width: '30px', padding: 0 }}
-                    title="Supprimer"
+                    title={t('deleteCollection')}
                   >
                     <Trash2 size={13} />
                   </button>
@@ -493,7 +493,7 @@ export default function DesktopDashboard({
             style={{ width: '100%', minHeight: '34px', fontSize: '0.8rem', marginTop: 'auto' }}
           >
             <Download size={14} />
-            <span>Exporter mes catalogues en JSON</span>
+            <span>{t('exportAllJson')}</span>
           </button>
         )}
 
@@ -513,7 +513,7 @@ export default function DesktopDashboard({
               gap: '0.35rem'
             }}
           >
-            <span>Mentions Légales & Confidentialité</span>
+            <span>{t('legalModalTitle')}</span>
           </button>
         </div>
       </div>
@@ -561,7 +561,7 @@ export default function DesktopDashboard({
             className="glass-input"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Tapez le titre d'un film ou d'une série..."
+            placeholder={t('searchPlaceholderCenter')}
             autoFocus
           />
           {query && (
@@ -577,7 +577,7 @@ export default function DesktopDashboard({
                 display: 'flex',
                 padding: '0.4rem'
               }}
-              aria-label="Effacer"
+              aria-label={t('clearList')}
             >
               <X size={16} />
             </button>
@@ -589,27 +589,27 @@ export default function DesktopDashboard({
           {!effectiveTmdbKey ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-secondary)' }}>
               <Film size={36} color="var(--accent-light)" style={{ opacity: 0.5, margin: '0 auto 0.75rem' }} />
-              <h4 style={{ color: '#fff', marginBottom: '0.35rem' }}>Clé API TMDB requise</h4>
-              <p style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>Renseignez votre clé TMDB pour rechercher en direct.</p>
+              <h4 style={{ color: '#fff', marginBottom: '0.35rem' }}>{t('tmdbKeyRequiredTitle')}</h4>
+              <p style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>{t('tmdbKeyRequiredDesc')}</p>
               <button onClick={onOpenSettings} className="btn btn-primary" style={{ minHeight: '36px', fontSize: '0.85rem' }}>
-                Paramètres ⚙️
+                {t('settings')} ⚙️
               </button>
             </div>
           ) : searching ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-secondary)' }}>
               <Loader2 size={30} className="spinner" style={{ margin: '0 auto 0.5rem' }} />
-              <p style={{ fontSize: '0.85rem' }}>Recherche TMDB en cours...</p>
+              <p style={{ fontSize: '0.85rem' }}>{t('searchingTmdb')}</p>
             </div>
           ) : query && results.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-secondary)' }}>
-              <p>Aucun résultat pour "{query}".</p>
+              <p>{t('noResultsFor')} "{query}".</p>
             </div>
           ) : !query ? (
             <div style={{ textAlign: 'center', padding: '4rem 1rem', color: 'var(--text-muted)' }}>
               <Sparkles size={36} color="var(--accent-light)" style={{ opacity: 0.35, margin: '0 auto 0.5rem' }} />
-              <p style={{ fontSize: '0.9rem' }}>Recherchez des films ou séries pour composer votre catalogue en direct.</p>
+              <p style={{ fontSize: '0.9rem' }}>{t('searchCenterPrompt')}</p>
               <p style={{ fontSize: '0.78rem', marginTop: '0.4rem', color: 'var(--text-muted)' }}>
-                Cliquez sur une affiche pour l'ajouter instantanément dans la colonne de droite.
+                {t('searchCenterSub')}
               </p>
             </div>
           ) : (
@@ -636,12 +636,12 @@ export default function DesktopDashboard({
                   >
                     <img src={item.poster} alt={item.title} loading="lazy" />
                     <span className="card-badge card-badge-type">
-                      {item.type === 'movie' ? 'Film' : 'Série'}
+                      {item.type === 'movie' ? t('movies') : t('series')}
                     </span>
                     {added && (
                       <span className="card-badge card-badge-added">
                         <Check size={11} style={{ display: 'inline', marginRight: '2px' }} />
-                        Ajouté
+                        {t('alreadyAdded')}
                       </span>
                     )}
                     <div className="movie-card-overlay">
@@ -664,9 +664,29 @@ export default function DesktopDashboard({
           ======================================================== */}
       <div className="glass-panel dashboard-col" style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', height: 'calc(100vh - 120px)', overflowY: 'auto' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 800 }}>
-            {t('builderTitle')}
-          </h3>
+          <div>
+            <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 800, margin: 0 }}>
+              {t('builderTitle')}
+            </h3>
+            {editingCollectionPath && (
+              <span style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.25rem',
+                fontSize: '0.7rem',
+                color: 'var(--accent-light)',
+                background: 'rgba(16, 185, 129, 0.12)',
+                border: '1px solid rgba(16, 185, 129, 0.3)',
+                borderRadius: '4px',
+                padding: '0.1rem 0.4rem',
+                marginTop: '0.25rem',
+                fontWeight: 600
+              }}>
+                <Sparkles size={10} />
+                {t('editingModeBadge')}
+              </span>
+            )}
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             {selectedItems.length > 0 && (
               <span style={{
@@ -678,7 +698,7 @@ export default function DesktopDashboard({
                 fontSize: '0.75rem',
                 fontWeight: 700
               }}>
-                {isSeriesMode ? '📺 Séries' : '🎬 Films'}
+                {isSeriesMode ? '📺 ' + t('series') : '🎬 ' + t('movies')}
               </span>
             )}
             <span style={{
@@ -703,7 +723,7 @@ export default function DesktopDashboard({
             className="glass-input"
             value={catalogName}
             onChange={(e) => setCatalogName(e.target.value)}
-            placeholder="Ex: Collection Harry Potter"
+            placeholder={t('catalogNamePlaceholder')}
             style={{ minHeight: '38px', fontSize: '0.875rem' }}
           />
         </div>
@@ -715,14 +735,14 @@ export default function DesktopDashboard({
           {(selectedItems.length > 0 || catalogName || resultData) && (
             <button
               onClick={() => {
-                if (window.confirm("Vider et réinitialiser le catalogue en cours ?")) {
+                if (window.confirm(t('resetBuilderConfirm'))) {
                   handleResetBuilder();
-                  addToast("Catalogue réinitialisé à zéro.", "info");
+                  addToast(t('resetBuilderToast'), "info");
                 }
               }}
               className="btn btn-danger btn-icon-only"
               style={{ width: '34px', height: '34px', flexShrink: 0 }}
-              title="Vider et repartir de zéro"
+              title={t('clearList')}
             >
               <Trash2 size={14} />
             </button>
@@ -734,8 +754,8 @@ export default function DesktopDashboard({
           {selectedItems.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
               <Film size={32} color="var(--accent-light)" style={{ opacity: 0.35, margin: '0 auto 0.5rem' }} />
-              <p style={{ fontSize: '0.85rem' }}>Votre catalogue est vide.</p>
-              <p style={{ fontSize: '0.75rem', marginTop: '0.3rem' }}>Sélectionnez des titres dans la colonne centrale pour les ajouter.</p>
+              <p style={{ fontSize: '0.85rem' }}>{t('emptyBuilder')}</p>
+              <p style={{ fontSize: '0.75rem', marginTop: '0.3rem' }}>{t('emptyBuilderSub')}</p>
             </div>
           ) : (
             selectedItems.map((item, index) => (
@@ -774,7 +794,7 @@ export default function DesktopDashboard({
                     disabled={index === 0}
                     className="btn btn-secondary"
                     style={{ width: '26px', height: '26px', padding: 0 }}
-                    title="Monter"
+                    title={t('moveUp')}
                   >
                     <ChevronUp size={13} />
                   </button>
@@ -783,7 +803,7 @@ export default function DesktopDashboard({
                     disabled={index === selectedItems.length - 1}
                     className="btn btn-secondary"
                     style={{ width: '26px', height: '26px', padding: 0 }}
-                    title="Descendre"
+                    title={t('moveDown')}
                   >
                     <ChevronDown size={13} />
                   </button>
@@ -791,7 +811,7 @@ export default function DesktopDashboard({
                     onClick={() => removeItem(item.id)}
                     className="btn btn-danger"
                     style={{ width: '26px', height: '26px', padding: 0 }}
-                    title="Retirer"
+                    title={t('removeItem')}
                   >
                     <X size={13} />
                   </button>
@@ -807,15 +827,34 @@ export default function DesktopDashboard({
             onClick={handleSaveAndRefresh}
             disabled={isPublishing || selectedItems.length === 0}
             className="btn btn-primary"
-            style={{ width: '100%', minHeight: '40px', fontSize: '0.875rem' }}
+            style={{
+              width: '100%',
+              minHeight: '42px',
+              fontSize: '0.875rem',
+              fontWeight: 700,
+              background: editingCollectionPath
+                ? 'linear-gradient(135deg, #059669, #047857)'
+                : 'linear-gradient(135deg, var(--accent), var(--accent-dark))',
+              boxShadow: editingCollectionPath
+                ? '0 4px 15px rgba(5, 150, 105, 0.4)'
+                : '0 4px 15px var(--accent-glow)'
+            }}
           >
             {isPublishing ? (
               <>
                 <Loader2 size={16} className="spinner" />
-                <span>Sauvegarde en cours...</span>
+                <span>{t('updatingOnGithub')}</span>
+              </>
+            ) : editingCollectionPath ? (
+              <>
+                <RefreshCw size={15} />
+                <span>{t('updateCatalogBtn')}</span>
               </>
             ) : (
-              <span>Enregistrer & Obtenir le lien AIO</span>
+              <>
+                <Plus size={16} />
+                <span>{t('publishCatalogBtn')}</span>
+              </>
             )}
           </button>
 
@@ -826,7 +865,7 @@ export default function DesktopDashboard({
               style={{ width: '100%', minHeight: '34px', fontSize: '0.78rem' }}
             >
               <Download size={13} />
-              <span>Exporter ce catalogue en JSON</span>
+              <span>{t('exportCatalogJson')}</span>
             </button>
           )}
         </div>
@@ -844,7 +883,7 @@ export default function DesktopDashboard({
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
               <Check size={16} color="var(--emerald)" />
-              <span style={{ fontWeight: 800, fontSize: '0.85rem', color: '#fff' }}>Catalogue prêt pour AIO !</span>
+              <span style={{ fontWeight: 800, fontSize: '0.85rem', color: '#fff' }}>{t('readyForAio')}</span>
             </div>
 
             <div style={{ display: 'flex', gap: '0.35rem' }}>
@@ -859,7 +898,7 @@ export default function DesktopDashboard({
                 onClick={copyManifestUrl}
                 className="btn btn-primary"
                 style={{ minHeight: '32px', width: '34px', padding: 0, flexShrink: 0 }}
-                title="Copier le lien AIO"
+                title={t('copyUrl')}
               >
                 {copiedManifest ? <Check size={14} /> : <Copy size={14} />}
               </button>

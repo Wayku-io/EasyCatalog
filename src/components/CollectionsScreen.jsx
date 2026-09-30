@@ -130,7 +130,7 @@ export default function CollectionsScreen({
         </button>
         <button onClick={onCreateNew} className="btn btn-primary mobile-touch-btn" style={{ padding: '0.5rem 0.9rem', fontSize: '0.85rem' }}>
           <PlusCircle size={16} />
-          <span>Nouveau</span>
+          <span>{t('newCatalogShort')}</span>
         </button>
       </div>
 
@@ -147,12 +147,12 @@ export default function CollectionsScreen({
       {!config?.githubToken || !config?.githubRepo ? (
         <div className="glass-panel" style={{ textAlign: 'center', padding: '2.5rem 1.25rem', marginBottom: '1.5rem' }}>
           <Folder size={40} color="var(--cyan)" style={{ opacity: 0.6, margin: '0 auto 1rem' }} />
-          <h3 style={{ color: '#fff', marginBottom: '0.5rem', fontSize: '1.15rem' }}>Dépôt GitHub non connecté</h3>
+          <h3 style={{ color: '#fff', marginBottom: '0.5rem', fontSize: '1.15rem' }}>{t('configureRepoNotice')}</h3>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
-            Renseignez votre Token GitHub et votre dépôt dans les Paramètres pour charger et synchroniser vos catalogues.
+            {t('configureRepoNotice')}
           </p>
           <button onClick={onOpenSettings} className="btn btn-primary" style={{ width: '100%', maxWidth: '280px', margin: '0 auto' }}>
-            Ouvrir les Paramètres ⚙️
+            {t('settings')} ⚙️
           </button>
         </div>
       ) : loading ? (
@@ -224,7 +224,7 @@ export default function CollectionsScreen({
                     </button>
                   </div>
                   <span style={{ fontSize: '0.75rem', color: '#fbbf24' }}>
-                    ✓ Prêt ! Collez ce lien dans AIO Metadata pour avoir toutes vos collections.
+                    {t('aioHelpTip')}
                   </span>
                 </div>
               )}
@@ -237,11 +237,11 @@ export default function CollectionsScreen({
               <Folder size={44} color="var(--accent-light)" style={{ opacity: 0.4, margin: '0 auto 1rem' }} />
               <h3 style={{ color: '#fff', marginBottom: '0.4rem', fontSize: '1.15rem' }}>{t('noCollectionsFound')}</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '1.25rem' }}>
-                Créez votre première collection pour la retrouver ici.
+                {t('createFirstColNotice')}
               </p>
               <button onClick={onCreateNew} className="btn btn-primary" style={{ width: '100%', maxWidth: '260px', margin: '0 auto' }}>
                 <PlusCircle size={16} />
-                <span>Créer un catalogue</span>
+                <span>{t('newCollectionBtn')}</span>
               </button>
             </div>
           ) : (

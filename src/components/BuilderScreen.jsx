@@ -27,7 +27,8 @@ export default function BuilderScreen({
   isPublishing,
   resultData,
   onReset,
-  onBackToHub
+  onBackToHub,
+  editingCollectionPath
 }) {
   const { t } = useLanguage();
   const { addToast } = useToast();
@@ -140,9 +141,28 @@ export default function BuilderScreen({
 
       {/* Main Panel */}
       <div className="glass-panel" style={{ padding: '1.25rem' }}>
-        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.45rem', fontWeight: 800, marginBottom: '0.2rem' }}>
-          {t('builderTitle')}
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
+          <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.45rem', fontWeight: 800, margin: 0 }}>
+            {t('builderTitle')}
+          </h2>
+          {editingCollectionPath && (
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.25rem',
+              fontSize: '0.72rem',
+              color: 'var(--accent-light)',
+              background: 'rgba(16, 185, 129, 0.12)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
+              borderRadius: '4px',
+              padding: '0.15rem 0.45rem',
+              fontWeight: 600
+            }}>
+              <Sparkles size={11} />
+              {t('editingModeBadge')}
+            </span>
+          )}
+        </div>
         <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
           {t('builderSubtitle')}
         </p>
@@ -257,17 +277,39 @@ export default function BuilderScreen({
           </div>
         )}
 
-        {/* Action Button: Publish to GitHub */}
+        {/* Action Button: Publish to GitHub / Update */}
         {items.length > 0 && (
           <div style={{ marginTop: '1.25rem' }}>
             <button
               onClick={onPublish}
               disabled={isPublishing || items.length === 0}
               className="btn btn-primary"
-              style={{ width: '100%', minHeight: '48px', fontSize: '0.95rem' }}
+              style={{
+                width: '100%',
+                minHeight: '48px',
+                fontSize: '0.95rem',
+                fontWeight: 700,
+                background: editingCollectionPath
+                  ? 'linear-gradient(135deg, #059669, #047857)'
+                  : 'linear-gradient(135deg, var(--accent), var(--accent-dark))',
+                boxShadow: editingCollectionPath
+                  ? '0 4px 15px rgba(5, 150, 105, 0.4)'
+                  : '0 4px 15px var(--accent-glow)'
+              }}
             >
-              <UploadCloud size={18} />
-              <span>{isPublishing ? t('updatingOnGithub') : t('publishToGithub')}</span>
+              {isPublishing ? (
+                <span>{t('updatingOnGithub')}</span>
+              ) : editingCollectionPath ? (
+                <>
+                  <UploadCloud size={18} />
+                  <span>{t('updateCatalogBtn')}</span>
+                </>
+              ) : (
+                <>
+                  <UploadCloud size={18} />
+                  <span>{t('publishToGithub')}</span>
+                </>
+              )}
             </button>
           </div>
         )}
