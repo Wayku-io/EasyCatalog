@@ -8,7 +8,6 @@ import SearchScreen from './components/SearchScreen';
 import BuilderScreen from './components/BuilderScreen';
 import CollectionsScreen from './components/CollectionsScreen';
 import DesktopDashboard from './components/DesktopDashboard';
-import MobileModal from './components/MobileModal';
 import LegalModal from './components/LegalModal';
 import {
   publishCollection,
@@ -102,7 +101,6 @@ export default function App() {
 
   // Modal States
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
   const [isLegalOpen, setIsLegalOpen] = useState(false);
 
   // Collection / Builder State
@@ -253,7 +251,6 @@ export default function App() {
     <div className="app-wrapper">
       <Header
         onOpenSettings={() => setIsSettingsOpen(true)}
-        onOpenMobile={() => setIsMobileModalOpen(true)}
         onGoHub={() => setCurrentScreen('hub')}
         currentRepo={config.githubRepo}
       />
@@ -372,14 +369,6 @@ export default function App() {
         onSave={handleSaveConfig}
         onClose={() => setIsSettingsOpen(false)}
         onOpenLegal={() => setIsLegalOpen(true)}
-      />
-
-      {/* Mobile QR Modal (desktop only) */}
-      <MobileModal
-        isOpen={isMobileModalOpen}
-        onClose={() => setIsMobileModalOpen(false)}
-        localIp="192.168.1.16"
-        port="5173"
       />
 
       {/* Legal & Privacy Modal */}

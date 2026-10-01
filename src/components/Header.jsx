@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Layers, Settings, Coffee, GitBranch, Smartphone, ChevronDown, Check } from 'lucide-react';
+import { Layers, Settings, Coffee, GitBranch, ChevronDown, Check } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
-export default function Header({ onOpenSettings, onGoHub, currentRepo, onOpenMobile }) {
+export default function Header({ onOpenSettings, onGoHub, currentRepo }) {
   const { t, language, setLanguage } = useLanguage();
   const [isLangOpen, setIsLangOpen] = useState(false);
   const langDropdownRef = useRef(null);
@@ -134,17 +134,6 @@ export default function Header({ onOpenSettings, onGoHub, currentRepo, onOpenMob
           <Coffee size={15} />
           <span>{t('coffee')}</span>
         </a>
-
-        {/* Desktop-only Mobile QR button */}
-        <button
-          onClick={onOpenMobile}
-          className="btn btn-secondary desktop-only"
-          style={{ fontSize: '0.85rem', minHeight: '38px', padding: '0.45rem 0.85rem' }}
-          title="Tester sur iPhone / mobile"
-        >
-          <Smartphone size={15} color="var(--cyan)" />
-          <span>Mobile</span>
-        </button>
 
         {/* Settings button */}
         <button
