@@ -39,7 +39,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
   const [reposList, setReposList] = useState([]);
   const [isLoadingRepos, setIsLoadingRepos] = useState(false);
   const [showCreateRepo, setShowCreateRepo] = useState(false);
-  const [newRepoName, setNewRepoName] = useState('nuvio-catalogs');
+  const [newRepoName, setNewRepoName] = useState('aio-catalogs');
   const [isCreatingRepo, setIsCreatingRepo] = useState(false);
 
   useEffect(() => {
@@ -78,6 +78,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
             return prev;
           }
           const preferred =
+            repos.find((r) => r.toLowerCase().endsWith('/aio-catalogs')) ||
             repos.find((r) => r.toLowerCase().endsWith('/nuvio-catalogs')) ||
             repos.find((r) => r.toLowerCase().endsWith('/mes-catalogues')) ||
             repos.find((r) => r.toLowerCase().endsWith('/easycatalog')) ||
@@ -518,7 +519,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                           className="glass-input"
                           value={newRepoName}
                           onChange={(e) => setNewRepoName(e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, ''))}
-                          placeholder="ex: nuvio-catalogs"
+                          placeholder="ex: aio-catalogs"
                           style={{ fontSize: '0.8rem', padding: '0.35rem 0.6rem', flex: 1 }}
                         />
                         <button

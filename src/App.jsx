@@ -52,11 +52,12 @@ export default function App() {
 
           if (!selectedRepo || !repos.some((r) => r.toLowerCase() === selectedRepo.toLowerCase())) {
             const preferred =
+              repos.find((r) => r.toLowerCase().endsWith('/aio-catalogs')) ||
               repos.find((r) => r.toLowerCase().endsWith('/nuvio-catalogs')) ||
               repos.find((r) => r.toLowerCase().endsWith('/mes-catalogues')) ||
               repos.find((r) => r.toLowerCase().endsWith('/easycatalog')) ||
               repos[0] ||
-              `${profile.login}/nuvio-catalogs`;
+              `${profile.login}/aio-catalogs`;
             selectedRepo = preferred;
           }
 

@@ -186,7 +186,7 @@ export default function LegalModal({ isOpen, onClose }) {
                   3. Nature du service
                 </h3>
                 <p style={{ margin: 0 }}>
-                  EasyCatalog est un outil technique exécuté côté client dans le navigateur de l'utilisateur. Il permet de générer des fichiers de configuration au format JSON (manifestes Stremio) indexant des métadonnées publiques pour organiser des collections personnelles.
+                  EasyCatalog est un outil technique exécuté côté client dans le navigateur de l'utilisateur. Il permet de générer des fichiers de configuration au format JSON indexant des métadonnées publiques pour organiser des catalogues de streaming pour AIO Metadata.
                 </p>
               </div>
             </>
@@ -275,7 +275,7 @@ export default function LegalModal({ isOpen, onClose }) {
                   2. Marques et Décharge
                 </h3>
                 <p style={{ margin: 0 }}>
-                  Stremio, Nuvio, TMDB et GitHub sont des marques déposées et la propriété exclusive de leurs détenteurs respectifs. EasyCatalog est un outil tiers indépendant sans lien capitalistique ni commercial avec ces entités.
+                  TMDB et GitHub sont des marques déposées et la propriété exclusive de leurs détenteurs respectifs. EasyCatalog est un outil tiers indépendant sans lien capitalistique ni commercial avec ces entités.
                 </p>
               </div>
 

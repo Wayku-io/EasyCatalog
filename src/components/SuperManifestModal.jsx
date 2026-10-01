@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Zap, X, Loader2, Check, Copy, ExternalLink } from 'lucide-react';
+import { Zap, X, Loader2, Check, Copy } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useToast } from './Toast';
 import { compileSuperManifest, parseRepoString } from '../services/github';
@@ -114,21 +114,6 @@ export default function SuperManifestModal({ isOpen, onClose, config }) {
                 {t('reinstallNotice')}
               </div>
             )}
-
-            <a
-              href={result.stremioUrl}
-              className="btn btn-secondary"
-              style={{
-                width: '100%',
-                background: 'rgba(245, 158, 11, 0.2)',
-                borderColor: '#f59e0b',
-                color: '#fff',
-                fontWeight: 700
-              }}
-            >
-              <ExternalLink size={18} />
-              {t('installStremio')}
-            </a>
           </div>
         )}
       </div>

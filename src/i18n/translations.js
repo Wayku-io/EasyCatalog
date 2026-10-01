@@ -1,7 +1,7 @@
 export const translations = {
   fr: {
     appName: "EasyCatalog",
-    tagline: "Catalogues personnalisés pour AIO Metadata & Stremio",
+    tagline: "Générateur de catalogues de streaming pour AIO Metadata",
     coffee: "Offrir un café",
     settings: "Paramètres",
     
@@ -12,7 +12,7 @@ export const translations = {
     settingsSubtitle: "Modifiez vos clés API et votre dépôt GitHub.",
     languageLabel: "Langue",
     tmdbKeyLabel: "Clé API TMDB (v3)",
-    tmdbKeyHelp: "Permet de rechercher les films et séries.",
+    tmdbKeyHelp: "Permite de rechercher les films et séries.",
     tmdbKeyLink: "Obtenir une clé gratuite ↗",
     tmdbKeyPlaceholder: "Votre clé TMDB...",
     githubTokenLabel: "Token GitHub",
@@ -31,7 +31,7 @@ export const translations = {
     
     // Hub
     hubGreeting: "Bienvenue sur EasyCatalog",
-    hubSubtitle: "Créez vos catalogues de streaming en quelques secondes pour AIO Metadata, Nuvio et Stremio.",
+    hubSubtitle: "Créez vos catalogues de streaming en quelques secondes pour AIO Metadata.",
     newCollectionTitle: "Créer un catalogue",
     newCollectionDesc: "Recherchez des films ou séries sur TMDB et composez votre liste.",
     newCollectionBtn: "Nouveau catalogue",
@@ -175,7 +175,6 @@ export const translations = {
     copied: "Copié !",
     aioHelpTip: "💡 Dans AIO Metadata, cliquez simplement sur le bouton « Quick Add » et collez votre lien !",
     reinstallNotice: "⚠️ Réinstallation requise : collez ce nouveau lien dans AIO Metadata (et supprimez l'ancien) pour appliquer les modifications.",
-    installStremio: "Ou installer directement sur Stremio 🚀",
     
     // Common
     close: "Fermer",
@@ -185,7 +184,7 @@ export const translations = {
   
   en: {
     appName: "EasyCatalog",
-    tagline: "Custom Catalogs for AIO Metadata & Stremio",
+    tagline: "Streaming catalog generator for AIO Metadata",
     coffee: "Buy me a coffee",
     settings: "Settings",
     
@@ -213,7 +212,7 @@ export const translations = {
     configSavedSuccess: "Settings saved!",
     
     hubGreeting: "Welcome to EasyCatalog",
-    hubSubtitle: "Build custom streaming catalogs in seconds for AIO Metadata, Nuvio, and Stremio.",
+    hubSubtitle: "Build custom streaming catalogs in seconds for AIO Metadata.",
     newCollectionTitle: "Create a Catalog",
     newCollectionDesc: "Search movies or TV shows on TMDB and build your playlist.",
     newCollectionBtn: "New Catalog",
@@ -354,7 +353,6 @@ export const translations = {
     copied: "Copied!",
     aioHelpTip: "💡 In AIO Metadata, simply click the « Quick Add » button and paste your link!",
     reinstallNotice: "⚠️ Reinstallation required: paste this new link into AIO Metadata (and remove the old one) to apply changes.",
-    installStremio: "Or install directly on Stremio 🚀",
     
     close: "Close",
     back: "Back",
@@ -363,7 +361,7 @@ export const translations = {
 
   es: {
     appName: "EasyCatalog",
-    tagline: "Catálogos personalizados para AIO Metadata & Stremio",
+    tagline: "Generador de catálogos de streaming para AIO Metadata",
     coffee: "Invítame un café",
     settings: "Ajustes",
     configTitle: "Configuración",
@@ -389,7 +387,7 @@ export const translations = {
     configMissingError: "Por favor complete los campos requeridos.",
     configSavedSuccess: "¡Ajustes guardados!",
     hubGreeting: "Bienvenido a EasyCatalog",
-    hubSubtitle: "Crea tus catálogos de streaming en segundos para AIO Metadata, Nuvio y Stremio.",
+    hubSubtitle: "Crea tus catálogos de streaming en segundos para AIO Metadata.",
     newCollectionTitle: "Crear un catálogo",
     newCollectionDesc: "Busca películas o series en TMDB y crea tu lista.",
     newCollectionBtn: "Nuevo catálogo",
@@ -527,7 +525,6 @@ export const translations = {
     copied: "¡Copiado!",
     aioHelpTip: "💡 En AIO Metadata, haz clic en el botón « Quick Add » y pega tu enlace.",
     reinstallNotice: "⚠️ Reinstalación requerida: pega este nuevo enlace en AIO Metadata (y elimina el anterior) para aplicar los cambios.",
-    installStremio: "O instalar directamente en Stremio 🚀",
     close: "Cerrar",
     back: "Volver",
     confirm: "Confirmar"
@@ -535,7 +532,7 @@ export const translations = {
 
   pt: {
     appName: "EasyCatalog",
-    tagline: "Catálogos personalizados para AIO Metadata & Stremio",
+    tagline: "Gerador de catálogos de streaming para AIO Metadata",
     coffee: "Pague-me um café",
     settings: "Configurações",
     configTitle: "Configuração",
@@ -561,7 +558,7 @@ export const translations = {
     configMissingError: "Preencha os campos necessários.",
     configSavedSuccess: "Configurações salvas!",
     hubGreeting: "Bem-vindo ao EasyCatalog",
-    hubSubtitle: "Crie seus catálogos de streaming em segundos para AIO Metadata, Nuvio e Stremio.",
+    hubSubtitle: "Crie seus catálogos de streaming em segundos para AIO Metadata.",
     newCollectionTitle: "Criar um catálogo",
     newCollectionDesc: "Pesquise filmes ou séries no TMDB e monte sua lista.",
     newCollectionBtn: "Novo catálogo",
@@ -699,7 +696,6 @@ export const translations = {
     copied: "Copiado!",
     aioHelpTip: "💡 No AIO Metadata, basta clicar no botão « Quick Add » e colar seu link!",
     reinstallNotice: "⚠️ Reinstalação necessária: cole este novo link no AIO Metadata (e remova o antigo) para aplicar as alterações.",
-    installStremio: "Ou instalar diretamente no Stremio 🚀",
     close: "Fechar",
     back: "Voltar",
     confirm: "Confirmar"
