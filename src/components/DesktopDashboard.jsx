@@ -41,6 +41,9 @@ export default function DesktopDashboard({
   selectedItems,
   setSelectedItems,
   onToggleItem,
+  sortOption = 'manual',
+  setSortOption,
+  onSortChange,
   resultData,
   setResultData,
   isPublishing,
@@ -78,8 +81,7 @@ export default function DesktopDashboard({
   const [searching, setSearching] = useState(false);
   const searchTimeoutRef = useRef(null);
 
-  // Right column: Builder sort state
-  const [sortOption, setSortOption] = useState('manual');
+  // Right column: Builder sort & state
   const [copiedManifest, setCopiedManifest] = useState(false);
 
   const loadCollectionsList = async () => {
@@ -155,6 +157,8 @@ export default function DesktopDashboard({
       setCatalogName(data.name || '');
       setSelectedItems(data.items || []);
       if (setEditingCollectionPath) setEditingCollectionPath(col.path);
+      if (onSortChange) onSortChange('manual');
+      else setSortOption?.('manual');
       setResultData({
         jsDelivrUrl: data.jsDelivrUrl,
         stremioUrl: data.stremioUrl
@@ -241,7 +245,8 @@ export default function DesktopDashboard({
       copy[index - 1] = temp;
       return copy;
     });
-    setSortOption('manual');
+    if (onSortChange) onSortChange('manual');
+    else setSortOption?.('manual');
   };
 
   const moveDown = (index) => {
@@ -253,7 +258,8 @@ export default function DesktopDashboard({
       copy[index + 1] = temp;
       return copy;
     });
-    setSortOption('manual');
+    if (onSortChange) onSortChange('manual');
+    else setSortOption?.('manual');
   };
 
   const removeItem = (id) => {
@@ -261,21 +267,9 @@ export default function DesktopDashboard({
   };
 
   const handleSortChange = (newVal) => {
-    const val = typeof newVal === 'string' ? newVal : newVal?.target?.value;
-    setSortOption(val);
-    if (val === 'manual') return;
-
-    setSelectedItems(prev => {
-      const copy = [...prev];
-      if (val === 'year-asc') {
-        copy.sort((a, b) => parseInt(a.year || 0) - parseInt(b.year || 0));
-      } else if (val === 'year-desc') {
-        copy.sort((a, b) => parseInt(b.year || 0) - parseInt(a.year || 0));
-      } else if (val === 'alpha') {
-        copy.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-      }
-      return copy;
-    });
+    if (onSortChange) {
+      onSortChange(newVal);
+    }
   };
 
   const copyManifestUrl = () => {

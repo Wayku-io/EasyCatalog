@@ -18,6 +18,7 @@ import {
   fetchUserRepos,
   createDefaultRepo
 } from './services/github';
+import { sortItems } from './utils/sorting';
 
 export default function App() {
   const { t } = useLanguage();
@@ -106,6 +107,7 @@ export default function App() {
   // Collection / Builder State
   const [catalogName, setCatalogName] = useState('');
   const [selectedItems, setSelectedItems] = useState([]);
+  const [sortOption, setSortOption] = useState('manual');
   const [resultData, setResultData] = useState(null);
   const [isPublishing, setIsPublishing] = useState(false);
   const [hasExistingCollection, setHasExistingCollection] = useState(false);
@@ -148,10 +150,20 @@ export default function App() {
   const handleCreateNew = () => {
     setCatalogName('');
     setSelectedItems([]);
+    setSortOption('manual');
     setResultData(null);
     setHasExistingCollection(false);
     setEditingCollectionPath(null);
     setCurrentScreen('search');
+  };
+
+  // Flow: Sort change handler
+  const handleSortChange = (newVal) => {
+    const val = typeof newVal === 'string' ? newVal : newVal?.target?.value;
+    setSortOption(val);
+    if (val && val !== 'manual') {
+      setSelectedItems(prev => sortItems(prev, val));
+    }
   };
 
   // Flow: Add or remove item in search (Enforce strict separation: either all movies or all series)
@@ -168,7 +180,8 @@ export default function App() {
             return prev;
           }
         }
-        return [...prev, item];
+        const updated = [...prev, item];
+        return sortItems(updated, sortOption);
       }
     });
   };
@@ -177,6 +190,7 @@ export default function App() {
   const handleOpenEditorWithData = (data) => {
     setCatalogName(data.name || '');
     setSelectedItems(data.items || []);
+    setSortOption('manual');
     setEditingCollectionPath(data.path || null);
     setResultData({
       jsDelivrUrl: data.jsDelivrUrl,
@@ -228,6 +242,7 @@ export default function App() {
   const handleResetBuilder = () => {
     setCatalogName('');
     setSelectedItems([]);
+    setSortOption('manual');
     setResultData(null);
     setHasExistingCollection(false);
     setEditingCollectionPath(null);
@@ -265,6 +280,9 @@ export default function App() {
             selectedItems={selectedItems}
             setSelectedItems={setSelectedItems}
             onToggleItem={handleToggleItem}
+            sortOption={sortOption}
+            setSortOption={setSortOption}
+            onSortChange={handleSortChange}
             resultData={resultData}
             setResultData={setResultData}
             isPublishing={isPublishing}
@@ -329,6 +347,9 @@ export default function App() {
                 setCatalogName={setCatalogName}
                 items={selectedItems}
                 setItems={setSelectedItems}
+                sortOption={sortOption}
+                setSortOption={setSortOption}
+                onSortChange={handleSortChange}
                 onAddMoreItems={() => setCurrentScreen('search')}
                 onPublish={handlePublish}
                 isPublishing={isPublishing}

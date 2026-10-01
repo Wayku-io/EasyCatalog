@@ -545,9 +545,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                     onChange={(e) => setGithubRepo(e.target.value)}
                     style={{
                       fontSize: '0.85rem',
-                      padding: '0.5rem 0.7rem',
-                      background: '#151921',
-                      color: '#fff',
+                      minHeight: '42px',
                       cursor: 'pointer'
                     }}
                   >
@@ -555,7 +553,7 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
                       <option value={githubRepo}>{githubRepo || t('noReposFound')}</option>
                     ) : (
                       reposList.map((r) => (
-                        <option key={r} value={r} style={{ background: '#151921', color: '#fff' }}>
+                        <option key={r} value={r}>
                           {r}
                         </option>
                       ))

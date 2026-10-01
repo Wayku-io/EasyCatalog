@@ -22,6 +22,9 @@ export default function BuilderScreen({
   setCatalogName,
   items,
   setItems,
+  sortOption = 'manual',
+  setSortOption,
+  onSortChange,
   onAddMoreItems,
   onPublish,
   isPublishing,
@@ -33,7 +36,6 @@ export default function BuilderScreen({
   const { t } = useLanguage();
   const { addToast } = useToast();
   const [copied, setCopied] = useState(false);
-  const [sortOption, setSortOption] = useState('manual');
 
   // Move item up
   const moveUp = (index) => {
@@ -45,7 +47,8 @@ export default function BuilderScreen({
       copy[index - 1] = temp;
       return copy;
     });
-    setSortOption('manual');
+    if (onSortChange) onSortChange('manual');
+    else setSortOption?.('manual');
   };
 
   // Move item down
@@ -58,7 +61,8 @@ export default function BuilderScreen({
       copy[index + 1] = temp;
       return copy;
     });
-    setSortOption('manual');
+    if (onSortChange) onSortChange('manual');
+    else setSortOption?.('manual');
   };
 
   // Remove item
@@ -68,22 +72,9 @@ export default function BuilderScreen({
 
   // Handle Sort Change
   const handleSortChange = (newVal) => {
-    const val = typeof newVal === 'string' ? newVal : newVal?.target?.value;
-    setSortOption(val);
-
-    if (val === 'manual') return;
-
-    setItems(prev => {
-      const copy = [...prev];
-      if (val === 'year-asc') {
-        copy.sort((a, b) => parseInt(a.year || 0) - parseInt(b.year || 0));
-      } else if (val === 'year-desc') {
-        copy.sort((a, b) => parseInt(b.year || 0) - parseInt(a.year || 0));
-      } else if (val === 'alpha') {
-        copy.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-      }
-      return copy;
-    });
+    if (onSortChange) {
+      onSortChange(newVal);
+    }
   };
 
   // Copy manifest URL
