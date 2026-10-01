@@ -14,7 +14,6 @@ import {
   Loader2,
   X,
   ExternalLink,
-  Download,
   Sparkles,
   Lock,
   RefreshCw,
@@ -32,7 +31,6 @@ import {
   fetchSuperManifestInfo,
   parseRepoString
 } from '../services/github';
-import { exportCatalogToJson, exportAllCollectionsToJson } from '../services/export';
 
 export default function DesktopDashboard({
   config,
@@ -525,18 +523,6 @@ export default function DesktopDashboard({
           )}
         </div>
 
-        {/* Bouton Exporter Tout en JSON */}
-        {collections.length > 0 && (
-          <button
-            onClick={() => exportAllCollectionsToJson(collections)}
-            className="btn btn-secondary"
-            style={{ width: '100%', minHeight: '34px', fontSize: '0.8rem', marginTop: 'auto' }}
-          >
-            <Download size={14} />
-            <span>{t('exportAllJson')}</span>
-          </button>
-        )}
-
         {/* Footer info & Legal */}
         <div style={{ textAlign: 'center', marginTop: '0.4rem', borderTop: '1px solid rgba(255, 255, 255, 0.06)', paddingTop: '0.4rem' }}>
           <button
@@ -897,17 +883,6 @@ export default function DesktopDashboard({
               </>
             )}
           </button>
-
-          {selectedItems.length > 0 && (
-            <button
-              onClick={() => exportCatalogToJson(catalogName, selectedItems)}
-              className="btn btn-secondary"
-              style={{ width: '100%', minHeight: '34px', fontSize: '0.78rem' }}
-            >
-              <Download size={13} />
-              <span>{t('exportCatalogJson')}</span>
-            </button>
-          )}
         </div>
 
         {/* Carte de résultat si publié */}
