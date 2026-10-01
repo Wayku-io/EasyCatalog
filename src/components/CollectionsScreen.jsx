@@ -293,11 +293,12 @@ export default function CollectionsScreen({
                   key={col.path}
                   className="glass-panel"
                   style={{
-                    padding: '1.1rem',
+                    padding: '1rem',
                     borderRadius: 'var(--radius-md)',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '0.85rem'
+                    gap: '0.85rem',
+                    overflow: 'hidden'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -325,38 +326,69 @@ export default function CollectionsScreen({
                   </div>
 
                   {/* Boutons d'action tactiles bien espacés */}
-                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: '0.45rem', alignItems: 'center', width: '100%' }}>
                     <button
                       onClick={() => handleOpen(col)}
                       disabled={loadingId === col.path}
                       className="btn btn-primary"
-                      style={{ flex: 1, padding: '0.65rem 0.85rem', fontSize: '0.85rem' }}
+                      style={{
+                        flex: 1,
+                        minWidth: 0,
+                        padding: '0.6rem 0.65rem',
+                        fontSize: '0.85rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.4rem'
+                      }}
                     >
                       {loadingId === col.path ? (
                         <Loader2 size={16} className="spinner" style={{ animation: 'spin 1s linear infinite' }} />
                       ) : (
                         <>
-                          <Edit3 size={15} />
-                          <span>{t('openInEditor')}</span>
+                          <Edit3 size={15} style={{ flexShrink: 0 }} />
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {t('editBtn')}
+                          </span>
                         </>
                       )}
                     </button>
 
                     <button
                       onClick={(e) => handleCopy(col, e)}
-                      className="btn btn-secondary mobile-touch-btn"
-                      style={{ padding: '0.65rem 0.85rem', fontSize: '0.85rem' }}
+                      className="btn btn-secondary"
+                      style={{
+                        padding: '0.6rem 0.75rem',
+                        fontSize: '0.85rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.4rem',
+                        flexShrink: 0
+                      }}
                       title={t('copyDirectLink')}
                     >
-                      {copiedPath === col.path ? <Check size={16} color="var(--emerald)" /> : <Copy size={16} />}
-                      <span className="mobile-hide-sm">{t('copyDirectLink')}</span>
+                      {copiedPath === col.path ? (
+                        <Check size={15} color="var(--emerald)" style={{ flexShrink: 0 }} />
+                      ) : (
+                        <Copy size={15} style={{ flexShrink: 0 }} />
+                      )}
+                      <span>{copiedPath === col.path ? t('copied') : t('copyBtnShort')}</span>
                     </button>
 
                     <button
                       onClick={(e) => handleDelete(col, e)}
                       className="btn btn-danger btn-icon-only"
-                      style={{ padding: '0.65rem' }}
+                      style={{
+                        width: '38px',
+                        height: '38px',
+                        minHeight: '38px',
+                        padding: 0,
+                        flexShrink: 0,
+                        borderRadius: 'var(--radius-md)'
+                      }}
                       title={t('deleteCollection')}
+                      aria-label={t('deleteCollection')}
                     >
                       <Trash2 size={16} />
                     </button>
