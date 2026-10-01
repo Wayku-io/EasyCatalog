@@ -115,13 +115,14 @@ html, body {
 }
 
 @media (min-width: 1024px) {
-  html, body, #root {
+  body.studio-mode,
+  body.studio-mode #root {
     height: 100vh !important;
     max-height: 100vh !important;
     overflow: hidden !important;
   }
 
-  .app-wrapper {
+  .app-wrapper.studio-mode {
     max-width: 1600px;
     height: 100vh;
     max-height: 100vh;

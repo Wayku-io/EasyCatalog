@@ -9,6 +9,7 @@ import BuilderScreen from './components/BuilderScreen';
 import CollectionsScreen from './components/CollectionsScreen';
 import DesktopDashboard from './components/DesktopDashboard';
 import LegalModal from './components/LegalModal';
+import LandingPage from './components/LandingPage';
 import {
   publishCollection,
   parseRepoString,
@@ -25,11 +26,61 @@ export default function App() {
 
   const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' && window.innerWidth >= 1024);
 
+  // View state: 'landing' (presentation page) | 'app' (studio dashboard / mobile hub)
+  const [currentView, setCurrentView] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      if (hash === '#dashboard' || hash === '#app') return 'app';
+    }
+    return 'landing';
+  });
+
+  const handleLaunchApp = () => {
+    window.location.hash = '#dashboard';
+    setCurrentView('app');
+  };
+
+  const handleGoLanding = () => {
+    if (window.location.hash) {
+      window.history.pushState(null, '', window.location.pathname);
+    }
+    setCurrentView('landing');
+  };
+
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash;
+      if (hash === '#dashboard' || hash === '#app') {
+        setCurrentView('app');
+      } else {
+        setCurrentView('landing');
+      }
+    };
+    window.addEventListener('hashchange', handleHash);
+    window.addEventListener('popstate', handleHash);
+    return () => {
+      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('popstate', handleHash);
+    };
+  }, []);
+
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Manage studio-mode class on body only when in desktop app view
+  useEffect(() => {
+    if (currentView === 'app' && isDesktop) {
+      document.body.classList.add('studio-mode');
+    } else {
+      document.body.classList.remove('studio-mode');
+    }
+    return () => {
+      document.body.classList.remove('studio-mode');
+    };
+  }, [currentView, isDesktop]);
 
   // Handle OAuth code callback from GitHub
   useEffect(() => {
@@ -70,6 +121,8 @@ export default function App() {
             githubRepo: selectedRepo
           }));
           setHasDismissedGate(true);
+          setCurrentView('app');
+          window.location.hash = '#dashboard';
           addToast(`🎉 Connecté avec succès ! Bienvenue @${profile.login}`, 'success');
           // Open settings so the user can verify or choose their repository
           setIsSettingsOpen(true);
@@ -247,11 +300,40 @@ export default function App() {
     setEditingCollectionPath(null);
   };
 
+  if (currentView === 'landing') {
+    return (
+      <div className="landing-root" style={{ width: '100%', minHeight: '100vh', margin: 0, padding: 0 }}>
+        <LandingPage
+          onLaunchApp={handleLaunchApp}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          onOpenLegal={() => setIsLegalOpen(true)}
+        />
+
+        {/* Settings Modal (available anytime) */}
+        <ConfigModal
+          isOpen={isSettingsOpen}
+          isInitialGate={false}
+          config={config}
+          onSave={handleSaveConfig}
+          onClose={() => setIsSettingsOpen(false)}
+          onOpenLegal={() => setIsLegalOpen(true)}
+        />
+
+        {/* Legal & Privacy Modal */}
+        <LegalModal
+          isOpen={isLegalOpen}
+          onClose={() => setIsLegalOpen(false)}
+        />
+      </div>
+    );
+  }
+
   return (
-    <div className="app-wrapper">
+    <div className={`app-wrapper ${isDesktop ? 'studio-mode' : ''}`}>
       <Header
         onOpenSettings={() => setIsSettingsOpen(true)}
         onGoHub={() => setCurrentScreen('hub')}
+        onGoLanding={handleGoLanding}
         currentRepo={config.githubRepo}
       />
 

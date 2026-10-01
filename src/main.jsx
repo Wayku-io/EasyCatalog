@@ -4,12 +4,14 @@ import './index.css';
 import App from './App.jsx';
 import { LanguageProvider } from './i18n/LanguageContext.jsx';
 import { ToastProvider } from './components/Toast.jsx';
+import { Analytics } from '@vercel/analytics/react';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <LanguageProvider>
       <ToastProvider>
         <App />
+        <Analytics />
       </ToastProvider>
     </LanguageProvider>
   </StrictMode>,

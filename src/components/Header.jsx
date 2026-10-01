@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Layers, Settings, Coffee, GitBranch, ChevronDown, Check } from 'lucide-react';
 import { useLanguage } from '../i18n/LanguageContext';
 
-export default function Header({ onOpenSettings, onGoHub, currentRepo }) {
+export default function Header({ onOpenSettings, onGoHub, onGoLanding, currentRepo }) {
   const { t, language, setLanguage } = useLanguage();
   const [isLangOpen, setIsLangOpen] = useState(false);
   const langDropdownRef = useRef(null);
@@ -30,13 +30,56 @@ export default function Header({ onOpenSettings, onGoHub, currentRepo }) {
 
   return (
     <header className="app-header">
-      <div className="brand" onClick={onGoHub} title={t('backToHub')}>
-        <div className="brand-icon">
-          <Layers size={20} color="#ffffff" />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+        <div
+          className="brand"
+          onClick={onGoLanding || onGoHub}
+          title={onGoLanding ? "Page de présentation" : t('backToHub')}
+          style={{ cursor: 'pointer' }}
+        >
+          <div className="brand-icon">
+            <Layers size={20} color="#ffffff" />
+          </div>
+          <div className="brand-title">
+            Easy<span>Catalog</span>
+          </div>
         </div>
-        <div className="brand-title">
-          Easy<span>Catalog</span>
-        </div>
+
+        {onGoLanding && (
+          <button
+            onClick={onGoLanding}
+            className="btn btn-secondary"
+            style={{
+              padding: '0.35rem 0.75rem',
+              fontSize: '0.8rem',
+              fontWeight: 600,
+              minHeight: '34px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              borderRadius: '999px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer',
+              transition: 'var(--transition)'
+            }}
+            title="Revenir à la page de présentation"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)';
+              e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+              e.currentTarget.style.color = '#ffffff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+              e.currentTarget.style.color = 'var(--text-secondary)';
+            }}
+          >
+            <span>←</span>
+            <span>Présentation</span>
+          </button>
+        )}
       </div>
 
       <div className="header-actions">
@@ -124,6 +167,7 @@ export default function Header({ onOpenSettings, onGoHub, currentRepo }) {
             </div>
           )}
         </div>
+
 
         {/* Desktop-only Coffee button */}
         <a
