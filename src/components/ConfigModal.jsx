@@ -259,6 +259,8 @@ export default function ConfigModal({ isOpen, isInitialGate, config, onSave, onC
               <option value="en" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>🇬🇧 English</option>
               <option value="es" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>🇪🇸 Español</option>
               <option value="pt" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>🇵🇹 Português</option>
+              <option value="de" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>🇩🇪 Deutsch</option>
+              <option value="it" style={{ background: 'var(--bg-secondary)', color: '#fff' }}>🇮🇹 Italiano</option>
             </select>
           </div>
 

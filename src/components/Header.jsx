@@ -11,7 +11,9 @@ export default function Header({ onOpenSettings, onGoHub, currentRepo }) {
     { code: 'fr', label: 'FR', flag: '🇫🇷', name: 'Français' },
     { code: 'en', label: 'EN', flag: '🇬🇧', name: 'English' },
     { code: 'es', label: 'ES', flag: '🇪🇸', name: 'Español' },
-    { code: 'pt', label: 'PT', flag: '🇵🇹', name: 'Português' }
+    { code: 'pt', label: 'PT', flag: '🇵🇹', name: 'Português' },
+    { code: 'de', label: 'DE', flag: '🇩🇪', name: 'Deutsch' },
+    { code: 'it', label: 'IT', flag: '🇮🇹', name: 'Italiano' }
   ];
 
   const currentLang = languages.find(l => l.code === language) || languages[0];

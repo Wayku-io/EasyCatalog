@@ -12,7 +12,15 @@ export async function searchTMDB(query, type = 'movie', apiKey, lang = 'fr') {
   const effectiveKey = getEffectiveTmdbKey(apiKey);
   if (!query || !query.trim() || !effectiveKey) return [];
 
-  const tmdbLang = lang === 'fr' ? 'fr-FR' : lang === 'es' ? 'es-ES' : lang === 'pt' ? 'pt-BR' : 'en-US';
+  const tmdbLangMap = {
+    fr: 'fr-FR',
+    en: 'en-US',
+    es: 'es-ES',
+    pt: 'pt-BR',
+    de: 'de-DE',
+    it: 'it-IT'
+  };
+  const tmdbLang = tmdbLangMap[lang] || 'en-US';
   const cleanQuery = encodeURIComponent(query.trim());
 
   // Determine endpoint(s): support 'movie', 'series', and 'tv'
